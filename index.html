@@ -30,7 +30,7 @@
   --mono:'IBM Plex Mono','Consolas',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;overflow-x:hidden}
 body{
   background:
     radial-gradient(900px 500px at 85% -5%, rgba(8,159,196,.10), transparent 60%),
@@ -73,6 +73,36 @@ section{padding:96px 0;position:relative;scroll-margin-top:80px}
 .eyebrow::before{content:"";width:38px;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan))}
 h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,38px);line-height:1.18;letter-spacing:-.01em;margin-bottom:16px;color:var(--blue)}
 .lede{color:#4A6285;max-width:660px;font-size:16.5px}
+
+/* ============ LANDSCAPE GATE (mobile portrait) ============ */
+#rotateGate{
+  position:fixed;inset:0;z-index:500;display:none;
+  align-items:center;justify-content:center;padding:28px;text-align:center;
+  background:
+    radial-gradient(700px 420px at 85% -5%, rgba(8,159,196,.12), transparent 60%),
+    radial-gradient(640px 420px at -5% 30%, rgba(255,106,31,.08), transparent 60%),
+    var(--paper);
+}
+#rotateGate::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(11,60,122,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,60,122,.045) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+#rotateGate .rg-card{position:relative;max-width:340px}
+#rotateGate .rg-logo{font-family:var(--display);font-weight:900;font-size:16px;letter-spacing:.04em;color:var(--blue);margin-bottom:28px}
+#rotateGate .rg-logo span{color:var(--accent)}
+#rotateGate .rg-phone{width:76px;height:76px;margin:0 auto 22px;color:var(--blue);animation:rgTurn 2.4s var(--ease) infinite}
+#rotateGate .rg-phone svg{width:100%;height:100%;display:block}
+@keyframes rgTurn{0%,22%{transform:rotate(0)}58%,82%{transform:rotate(-90deg)}100%{transform:rotate(-90deg)}}
+#rotateGate .rg-title{font-family:var(--display);font-weight:700;font-size:22px;color:var(--blue);margin-bottom:10px}
+#rotateGate .rg-sub{font-size:14px;color:#4A6285;line-height:1.55}
+#rotateGate .rg-tip{margin-top:20px;font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--cyan)}
+@media only screen and (hover:none) and (pointer:coarse) and (orientation:portrait) and (max-width:640px){
+  #rotateGate{display:flex}
+  html,body{overflow:hidden!important;height:100%}
+}
 
 /* ============ LOADER ============ */
 #loader{
@@ -755,6 +785,18 @@ body.intro-active{overflow-x:hidden}
 /* glassy nav */
 .topnav{backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);}
 
+/* mobile perf: heavy backdrop blur causes jank/hangs on phone GPUs and
+   iOS Safari rendering glitches on sticky elements — solid fills instead */
+@media (hover:none) and (pointer:coarse){
+  .prop,.cap,.edu,.proj-menu a,.contact-row a{
+    backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+    background:rgba(255,255,255,.94)!important;
+  }
+  .topnav,.nav-links,.proj-menu{backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+  .topnav{background:rgba(242,246,251,.97)}
+  .proj-menu{background:rgba(242,246,251,.98)}
+}
+
 @media (prefers-reduced-motion:reduce){ .cap:hover,.edu:hover{transform:none} }
 
 </style>
@@ -762,6 +804,25 @@ body.intro-active{overflow-x:hidden}
 <body class="intro-active">
 <div id="scrollBar" aria-hidden="true"></div>
 <div id="cursorGlow" aria-hidden="true"></div>
+
+<!-- ================== LANDSCAPE GATE (mobile portrait) ================== -->
+<div id="rotateGate" role="dialog" aria-label="Rotate your device to landscape">
+  <div class="rg-card">
+    <div class="rg-logo">V<span>/</span>PRASHANTH</div>
+    <div class="rg-phone" aria-hidden="true">
+      <svg viewBox="0 0 74 74" fill="none">
+        <rect x="25" y="11" width="24" height="52" rx="6" stroke="currentColor" stroke-width="3"/>
+        <line x1="33" y1="17" x2="41" y2="17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>
+        <circle cx="37" cy="56" r="2.4" fill="#FF6A1F"/>
+        <path d="M59 34 A24 24 0 0 0 47 13" stroke="#FF6A1F" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+        <path d="M59 34 L61.5 25.5 M59 34 L50.5 31.5" stroke="#FF6A1F" stroke-width="3.4" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="rg-title">Rotate to landscape</div>
+    <p class="rg-sub">This portfolio is an immersive, wide-screen experience. Turn your phone sideways to explore it.</p>
+    <div class="rg-tip">▸ Best viewed in landscape</div>
+  </div>
+</div>
 
 <!-- ================== CANVAS FRAME-SCRUB INTRO ================== -->
 <div id="introScroll" aria-hidden="false">
@@ -1452,7 +1513,13 @@ body.intro-active{overflow-x:hidden}
   function drawFrame(i, force){
     i = Math.min(lastFrame, Math.max(0, i));
     if(i===curFrame && !force) return;
-    const img = images[Math.min(LOAD_COUNT-1, Math.round(i/FRAME_STEP))];
+    const k = Math.min(LOAD_COUNT-1, Math.round(i/FRAME_STEP));
+    let img = images[k];
+    if(!img || !img.complete || !img.naturalWidth){
+      /* not ready yet — fall back to nearest earlier loaded frame so the
+         video keeps moving while later frames stream in */
+      for(let j=k-1;j>=0;j--){ const c=images[j]; if(c && c.complete && c.naturalWidth){ img=c; break; } }
+    }
     if(!img || !img.complete || !img.naturalWidth) return;
     curFrame=i;
     const cw=canvas.width, ch=canvas.height, iw=img.naturalWidth, ih=img.naturalHeight;
@@ -1624,6 +1691,16 @@ body.intro-active{overflow-x:hidden}
     scheduleRender();
   }
 
+  /* hard fallback: if intro assets can't load, drop the intro and go straight
+     to the site instead of leaving the user stuck on a loader */
+  function killIntro(){
+    introScroll.style.display='none';
+    if(introStage) introStage.remove();
+    document.body.classList.remove('intro-active');
+    page.classList.add('ready');
+    const tn=document.querySelector('.topnav'); if(tn) tn.classList.add('show');
+  }
+
   /* ----- left/right arrow caption stepping ----- */
   const navPrev=document.getElementById('navPrev');
   const navNext=document.getElementById('navNext');
@@ -1693,7 +1770,13 @@ body.intro-active{overflow-x:hidden}
       const done=loaded+failed;
       const pct=Math.round(done/LOAD_COUNT*100);
       ilFill.style.width=pct+'%'; ilPct.textContent=pct+'%';
-      if(done>=LOAD_COUNT) maybeStart();
+      if(done>=LOAD_COUNT){
+        if(failed > LOAD_COUNT*0.5){ killIntro(); return; }  /* assets missing → straight to site */
+        maybeStart();
+      } else if(!started && loaded >= Math.max(12, Math.round(LOAD_COUNT*0.25)) &&
+                images[0] && images[0].complete && images[0].naturalWidth){
+        maybeStart();  /* start scrolling early; remaining frames stream in behind */
+      }
     }
     for(let i=0;i<LOAD_COUNT;i++){
       const img=new Image(); img.decoding='async';
