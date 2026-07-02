@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#F2F6FB">
 <title>V Prashanth — Digital Project Delivery × Data Engineering</title>
 <meta name="description" content="V Prashanth · IIT Madras · Manager, Central Engineering at Tata Projects. Digital Project Delivery, BIM, analytics and automation.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -178,7 +179,28 @@ nav.topnav.show{opacity:1;transform:none;pointer-events:auto}
   box-shadow:0 8px 24px -8px rgba(255,106,31,.6);transition:transform .2s,box-shadow .2s;
 }
 .cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(255,106,31,.7)}
-@media(max-width:780px){.nav-links li:not(:last-child){display:none}}
+.nav-burger{display:none;background:none;border:0}
+@media(max-width:780px){
+  .nav-burger{
+    display:flex;flex-direction:column;justify-content:center;align-items:stretch;gap:5px;
+    width:44px;height:44px;padding:0 11px;cursor:pointer;
+    border:1.5px solid var(--line2);border-radius:10px;background:rgba(255,255,255,.75);
+  }
+  .nav-burger span{display:block;height:2px;border-radius:2px;background:var(--blue);transition:transform .3s var(--ease),opacity .2s}
+  .nav-burger.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-burger.open span:nth-child(2){opacity:0}
+  .nav-burger.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+  .nav-links{
+    position:absolute;top:100%;left:0;right:0;display:none;
+    flex-direction:column;align-items:stretch;gap:0;padding:6px 18px 18px;
+    background:rgba(242,246,251,.97);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+    border-bottom:1.5px solid var(--line);box-shadow:0 26px 44px -22px rgba(11,60,122,.4);
+  }
+  .nav-links.open{display:flex}
+  .nav-links li{width:100%}
+  .nav-links a{display:block;padding:14px 6px;font-size:13px;border-bottom:1px solid var(--line)}
+  .nav-links a.cta{display:block;text-align:center;margin-top:14px;padding:14px;border-bottom:0}
+}
 
 /* ============ HERO ============ */
 .hero{padding:100px 0 14px;position:relative}
@@ -277,6 +299,12 @@ nav.topnav.show{opacity:1;transform:none;pointer-events:auto}
 
 /* road frame */
 #range{width:100%;height:auto;display:block}
+.road-scroll{position:relative}
+@media(max-width:760px){
+  .road-scroll{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;scrollbar-width:none}
+  .road-scroll::-webkit-scrollbar{display:none}
+  .road-scroll #range{min-width:920px}
+}
 /* milestone HIGHWAY BOARDS: name on a gantry sign over the road */
 .stopGroup{cursor:pointer}
 .stopGroup .board{transition:transform .45s var(--ease),opacity .35s;transform-origin:bottom center;transform-box:fill-box}
@@ -389,9 +417,10 @@ input[type=range]:focus-visible{outline:3px solid var(--cyan);outline-offset:6px
   .kpi-item:nth-child(-n+2){border-bottom:1px solid var(--line)}
 }
 @media(max-width:460px){
-  .kpi-item{flex:1 1 100%}
-  .kpi-item:nth-child(odd){border-right:none}
-  .kpi-item:not(:last-child){border-bottom:1px solid var(--line)}
+  .kpi-item{padding:14px 12px;gap:10px}
+  .kpi-item .kpi-icon{width:36px;height:36px;border-radius:10px}
+  .kpi-item .kpi-icon svg{width:19px;height:19px}
+  .kpi-item .k{white-space:normal;line-height:1.3}
 }
 
 /* ============ PROJECTS + BOLD MENU ============ */
@@ -533,8 +562,18 @@ footer{border-top:1.5px solid var(--line);padding:24px;text-align:center;font-fa
 
 @media(max-width:640px){
   section{padding:70px 0}
-  .hero{padding:120px 0 16px}
+  .hero{padding:118px 0 16px}
   .journey{padding:36px 0 64px}
+  .wrap{padding:0 18px}
+  .nav-inner{padding:12px 16px}
+  .proj-menu{margin:0 -18px;padding:10px 18px}
+  .cap{padding:20px 16px}
+  .cap .cap-head{gap:12px}
+  .cap .icon{flex:0 0 44px;width:44px;height:44px}
+  .edu-row{padding:18px 16px}
+  .journey-ctrl{justify-content:center!important;text-align:center;gap:12px}
+  .contact-row{flex-direction:column;align-items:stretch;max-width:420px;margin:0 auto}
+  .contact-row a{justify-content:center}
 }
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
@@ -552,7 +591,7 @@ body.intro-active{overflow-x:hidden}
 #introScroll{position:relative;z-index:150;height:400vh;width:100%}
 #introStage{
   position:sticky;top:0;z-index:151;background:#0B1B33;
-  height:100vh;width:100%;
+  height:100vh;height:100dvh;width:100%;
   display:flex;align-items:center;justify-content:center;overflow:hidden;
 }
 #introCanvas{width:100%;height:100%;object-fit:cover;display:block}
@@ -756,7 +795,8 @@ body.intro-active{overflow-x:hidden}
 <nav class="topnav" aria-label="Primary">
   <div class="nav-inner">
     <a class="logo" href="#top">V<span>/</span>PRASHANTH</a>
-    <ul class="nav-links">
+    <button class="nav-burger" id="navBurger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="navLinks"><span></span><span></span><span></span></button>
+    <ul class="nav-links" id="navLinks">
       <li><a href="#journey">Journey</a></li>
       <li><a href="#kpi">KPI</a></li>
       <li><a href="#work">Projects</a></li>
@@ -988,6 +1028,7 @@ body.intro-active{overflow-x:hidden}
         <span class="jr-pop-tail" aria-hidden="true"></span>
       </div>
 
+      <div class="road-scroll">
       <svg id="range" viewBox="0 55 1200 415" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Highway timeline — each disc is a career milestone, the truck drives through them continuously">
         <defs>
           <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1">
@@ -1061,6 +1102,7 @@ body.intro-active{overflow-x:hidden}
           </g>
         </g>
       </svg>
+      </div><!-- /road-scroll -->
     </div><!-- /journey-stage -->
 
     <div class="journey-ctrl reveal" style="justify-content:space-between">
@@ -1089,28 +1131,28 @@ body.intro-active{overflow-x:hidden}
         <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><path d="M15 3c-4.5 2.5-7.5 3-11.5 3 0 11.5 4.5 18 11.5 23 7-5 11.5-11.5 11.5-23-4 0-7-.5-11.5-3Z" stroke="#fff" stroke-width="2"/><path d="M10.5 15h9M15 10.5v9" stroke="#FF8C4D" stroke-width="2" stroke-linecap="round"/></svg></div>
         <div class="kpi-text">
           <div class="v">₹<span data-count="2">0</span><em>Cr</em></div>
-          <div class="k">Cost savings achieved</div>
+          <div class="k">Cost savings delivered</div>
         </div>
       </div>
       <div class="kpi-item reveal">
         <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="16" width="5" height="10" rx="1.5" fill="#FF6A1F"/><rect x="12.5" y="10" width="5" height="16" rx="1.5" fill="#089FC4"/><rect x="21" y="4" width="5" height="22" rx="1.5" fill="#0B3C7A"/></svg></div>
         <div class="kpi-text">
           <div class="v"><span data-count="10">0</span><em>+</em></div>
-          <div class="k">Dashboards developed</div>
+          <div class="k">Dashboards shipped</div>
         </div>
       </div>
       <div class="kpi-item reveal">
         <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#0B3C7A" stroke-width="2.4"/><path d="M15 5 a10 10 0 0 1 9.6 12.8" stroke="#FF6A1F" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="15" r="3" fill="#089FC4"/></svg></div>
         <div class="kpi-text">
-          <div class="v"><span data-count="8">0</span><em>+</em></div>
-          <div class="k">Projects Delivered</div>
+          <div class="v"><span data-count="3">0</span><em>+</em></div>
+          <div class="k">Years · digital delivery</div>
         </div>
       </div>
       <div class="kpi-item reveal">
         <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="4" width="9.5" height="9.5" rx="2.4" stroke="#0B3C7A" stroke-width="2.2"/><rect x="16.5" y="4" width="9.5" height="9.5" rx="2.4" stroke="#089FC4" stroke-width="2.2"/><rect x="4" y="16.5" width="9.5" height="9.5" rx="2.4" stroke="#089FC4" stroke-width="2.2"/><rect x="16.5" y="16.5" width="9.5" height="9.5" rx="2.4" stroke="#FF6A1F" stroke-width="2.2"/></svg></div>
         <div class="kpi-text">
           <div class="v"><span data-count="10">0</span><em>+</em></div>
-          <div class="k">Digital Tools used</div>
+          <div class="k">Technologies used</div>
         </div>
       </div>
     </div>
@@ -1344,6 +1386,9 @@ body.intro-active{overflow-x:hidden}
   /* ============== CANVAS FRAME-SEQUENCE SCRUB INTRO ============== */
   const FRAME_COUNT = 160;
   const framePath = (i)=> 'assets/frames/frame_' + String(i).padStart(3,'0') + '.jpg';
+  /* on small screens / data-saver, load every 2nd frame — halves payload & load time */
+  const FRAME_STEP = (matchMedia('(max-width:768px)').matches || (navigator.connection && navigator.connection.saveData)) ? 2 : 1;
+  const LOAD_COUNT = Math.floor((FRAME_COUNT - 1) / FRAME_STEP) + 1;
 
   const introScroll = document.getElementById('introScroll');
   const introStage  = document.getElementById('introStage');
@@ -1396,7 +1441,7 @@ body.intro-active{overflow-x:hidden}
   let introFinished=false, rafPending=false, curFrame=-1;
   let releasedUpTo = -1;     // highest milestone index we're allowed to pass
   let parkedAt = -1;         // milestone index we are currently parked on (or -1)
-  const images = new Array(FRAME_COUNT);
+  const images = new Array(LOAD_COUNT);
 
   function sizeCanvas(){
     const dpr = Math.min(window.devicePixelRatio||1, 2);
@@ -1407,7 +1452,7 @@ body.intro-active{overflow-x:hidden}
   function drawFrame(i, force){
     i = Math.min(lastFrame, Math.max(0, i));
     if(i===curFrame && !force) return;
-    const img = images[i];
+    const img = images[Math.min(LOAD_COUNT-1, Math.round(i/FRAME_STEP))];
     if(!img || !img.complete || !img.naturalWidth) return;
     curFrame=i;
     const cw=canvas.width, ch=canvas.height, iw=img.naturalWidth, ih=img.naturalHeight;
@@ -1646,22 +1691,36 @@ body.intro-active{overflow-x:hidden}
     function maybeStart(){ if(!started){ started=true; startScrub(); } }
     function tick(){
       const done=loaded+failed;
-      const pct=Math.round(done/FRAME_COUNT*100);
+      const pct=Math.round(done/LOAD_COUNT*100);
       ilFill.style.width=pct+'%'; ilPct.textContent=pct+'%';
-      if(done>=FRAME_COUNT) maybeStart();
+      if(done>=LOAD_COUNT) maybeStart();
     }
-    for(let i=0;i<FRAME_COUNT;i++){
+    for(let i=0;i<LOAD_COUNT;i++){
       const img=new Image(); img.decoding='async';
       img.onload=()=>{ loaded++; tick(); };
       img.onerror=()=>{ failed++; tick(); };
-      img.src=framePath(i+1);
+      img.src=framePath(1 + i*FRAME_STEP);
       images[i]=img;
     }
     introSkip.addEventListener('click', revealSite);
     if(navNext) navNext.addEventListener('click', goNext);
     if(navPrev) navPrev.addEventListener('click', goPrev);
     updateNav();
-    setTimeout(()=>{ if((loaded+failed) >= FRAME_COUNT*0.6) maybeStart(); }, 8000);
+    setTimeout(()=>{ if((loaded+failed) >= LOAD_COUNT*0.6) maybeStart(); }, 8000);
+  }
+
+  /* mobile nav menu */
+  const navBurger=document.getElementById('navBurger');
+  const navLinksEl=document.getElementById('navLinks');
+  if(navBurger && navLinksEl){
+    const closeNav=()=>{ navLinksEl.classList.remove('open'); navBurger.classList.remove('open'); navBurger.setAttribute('aria-expanded','false'); };
+    navBurger.addEventListener('click',()=>{
+      const open=navLinksEl.classList.toggle('open');
+      navBurger.classList.toggle('open',open);
+      navBurger.setAttribute('aria-expanded',open?'true':'false');
+    });
+    navLinksEl.querySelectorAll('a').forEach(a=>a.addEventListener('click',closeNav));
+    addEventListener('resize',()=>{ if(!matchMedia('(max-width:780px)').matches) closeNav(); },{passive:true});
   }
 
   /* scroll progress bar */
@@ -1807,6 +1866,18 @@ body.intro-active{overflow-x:hidden}
         w1=document.getElementById('wheel1'), w2=document.getElementById('wheel2'),
         jrBody=document.getElementById('jrBody'), jrCard=document.getElementById('jrCard'),
         playBtn=document.getElementById('playBtn');
+  const roadScroll=document.querySelector('.road-scroll');
+  let followHold=0;
+  if(roadScroll){
+    const holdFollow=e=>{ if(e && e.target && e.target.closest && e.target.closest('#truck')) return; followHold=performance.now()+4500; };
+    roadScroll.addEventListener('touchstart',holdFollow,{passive:true});
+    roadScroll.addEventListener('touchmove',holdFollow,{passive:true});
+    roadScroll.addEventListener('wheel',holdFollow,{passive:true});
+  }
+  if(matchMedia('(pointer:coarse)').matches){
+    const jh=document.querySelector('.journey-hint');
+    if(jh) jh.textContent='👉 Swipe the road · tap a board · drag the truck';
+  }
 
   /* position the popup horizontally above a given board (viewBox x) */
   function positionPop(boardX){
@@ -1870,6 +1941,13 @@ body.intro-active{overflow-x:hidden}
     const r=`rotate(${wheelRot%360})`;
     w1.setAttribute('transform',`translate(-32,0) ${r}`);
     w2.setAttribute('transform',`translate(24,0) ${r}`);
+    /* mobile: keep the truck in view by gently scrolling the road container */
+    if(roadScroll && roadScroll.scrollWidth - roadScroll.clientWidth > 8 && auto && !dragging && now > followHold){
+      const svgW=rangeSvg.getBoundingClientRect().width;
+      const px=currX/1200*svgW;
+      const tgt=Math.max(0,Math.min(px - roadScroll.clientWidth*0.45, roadScroll.scrollWidth - roadScroll.clientWidth));
+      roadScroll.scrollLeft += (tgt - roadScroll.scrollLeft)*0.12;
+    }
     setActive(nearestStop(currX));
     loopRaf=requestAnimationFrame(frame);
   }
@@ -1904,9 +1982,18 @@ body.intro-active{overflow-x:hidden}
   truck.addEventListener('pointerdown',e=>{
     e.preventDefault(); dragging=true; pauseAuto(); targetX=svgX(e);
   });
-  addEventListener('pointermove',e=>{ if(dragging){ targetX=svgX(e); } },{passive:true});
+  addEventListener('pointermove',e=>{
+    if(!dragging) return;
+    targetX=svgX(e);
+    if(roadScroll && roadScroll.scrollWidth - roadScroll.clientWidth > 8){
+      const rb=roadScroll.getBoundingClientRect();
+      if(e.clientX > rb.right-44) roadScroll.scrollLeft += 9;
+      else if(e.clientX < rb.left+44) roadScroll.scrollLeft -= 9;
+    }
+  },{passive:true});
   addEventListener('pointerup',()=>{ dragging=false; });
   rangeSvg.addEventListener('pointerdown',e=>{
+    if(!matchMedia('(pointer:fine)').matches) return; /* touch: swipe scrolls, boards tap, truck drags */
     if(e.target.closest('.stopGroup')||e.target.closest('#truck')) return;
     const r=rangeSvg.getBoundingClientRect();
     const yv=((e.clientY-r.top)/r.height)*470;
