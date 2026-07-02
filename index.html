@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>V Prashanth — Digital Project Delivery × Data Engineering</title>
+<meta name="description" content="V Prashanth · IIT Madras · Manager, Central Engineering at Tata Projects. Digital Project Delivery, BIM, analytics and automation.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Archivo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F2F6FB;
+  --ink:#0D2548;
+  --blue:#0B3C7A;
+  --blue-soft:#9FBADE;
+  --line:rgba(11,60,122,.14);
+  --line2:rgba(11,60,122,.30);
+  --accent:#FF6A1F;
+  --accent2:#FF8C4D;
+  --cyan:#089FC4;
+  --card:#FFFFFF;
+  --shadow:0 18px 50px -18px rgba(11,60,122,.25);
+  --radius:18px;
+  --maxw:1160px;
+  --ease:cubic-bezier(.22,1,.36,1);
+  --display:'Unbounded','Arial Black',sans-serif;
+  --body:'Archivo','Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'IBM Plex Mono','Consolas',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(8,159,196,.10), transparent 60%),
+    radial-gradient(800px 500px at -5% 30%, rgba(255,106,31,.07), transparent 60%),
+    var(--paper);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16.5px;line-height:1.65;
+  overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+body::before{
+  content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(11,60,122,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,60,122,.045) 1px,transparent 1px),
+    linear-gradient(rgba(11,60,122,.09) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,60,122,.09) 1px,transparent 1px);
+  background-size:30px 30px,30px 30px,150px 150px,150px 150px;
+}
+#cursorGlow{
+  position:fixed;width:520px;height:520px;border-radius:50%;pointer-events:none;z-index:0;
+  background:radial-gradient(circle,rgba(8,159,196,.12),rgba(255,106,31,.05) 45%,transparent 70%);
+  transform:translate(-50%,-50%);
+}
+#scrollBar{
+  position:fixed;top:0;left:0;height:3px;width:0%;z-index:90;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  box-shadow:0 0 10px rgba(255,106,31,.5);
+}
+::selection{background:var(--accent);color:#fff}
+a{color:inherit}
+.mono{font-family:var(--mono)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px;position:relative;z-index:2}
+section{padding:96px 0;position:relative;scroll-margin-top:80px}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.24em;font-weight:600;
+  text-transform:uppercase;color:var(--cyan);display:flex;align-items:center;gap:12px;margin-bottom:18px;
+}
+.eyebrow::before{content:"";width:38px;height:2px;background:linear-gradient(90deg,var(--accent),var(--cyan))}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(24px,3.4vw,38px);line-height:1.18;letter-spacing:-.01em;margin-bottom:16px;color:var(--blue)}
+.lede{color:#4A6285;max-width:660px;font-size:16.5px}
+
+/* ============ LOADER ============ */
+#loader{
+  position:fixed;inset:0;z-index:200;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(8,159,196,.10), transparent 60%),
+    radial-gradient(800px 500px at -5% 30%, rgba(255,106,31,.07), transparent 60%),
+    var(--paper);
+  transition:opacity .8s ease,visibility .8s;
+  padding:20px;
+}
+#loader::before{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(11,60,122,.045) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(11,60,122,.045) 1px,transparent 1px);
+  background-size:30px 30px;
+}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none}
+.loader-scene{width:min(940px,94vw);position:relative;z-index:1}
+.loader-cap{
+  font-family:var(--display);font-weight:700;color:var(--blue);text-align:center;
+  font-size:clamp(16px,2.5vw,25px);margin-top:8px;
+}
+.loader-cap em{font-style:normal;color:var(--accent)}
+.loader-msg{
+  font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.16em;text-transform:uppercase;
+  color:#5B7396;text-align:center;margin-top:10px;min-height:1.4em;transition:opacity .3s;
+}
+.loader-bar{
+  width:min(420px,78vw);height:6px;border-radius:3px;background:rgba(11,60,122,.14);
+  margin:20px auto 0;overflow:hidden;position:relative;
+}
+.loader-bar i{
+  position:absolute;inset:0;width:0%;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent),var(--cyan));
+  transition:width .35s ease;
+}
+.loader-pct{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--cyan);text-align:center;margin-top:9px}
+
+/* ============ EPC SCENE animations ============ */
+.scene-holder{position:relative;pointer-events:none}
+#epcScene{width:100%;height:auto;display:block}
+.trolley{animation:trolleyMove 12s ease-in-out infinite}
+@keyframes trolleyMove{0%,8%{transform:translateX(0)}38%,58%{transform:translateX(250px)}88%,100%{transform:translateX(0)}}
+.crane-blink{animation:blink 1.4s infinite}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.15}}
+.scanFloor{animation:scanPulse 2.6s ease-in-out infinite}
+.scanFloor.s2{animation-delay:.6s}.scanFloor.s3{animation-delay:1.2s}
+@keyframes scanPulse{0%,100%{opacity:.25}50%{opacity:.9}}
+.scanBeam{animation:beamUp 4s ease-in-out infinite}
+@keyframes beamUp{0%{transform:translateY(0);opacity:0}12%{opacity:.8}55%{transform:translateY(-150px);opacity:.8}70%,100%{transform:translateY(-160px);opacity:0}}
+.wirePulse{stroke-dasharray:10 130;animation:dashflow 2.8s linear infinite}
+.wirePulse.w2{animation-delay:.9s}.wirePulse.w3{animation-delay:1.8s}
+@keyframes dashflow{to{stroke-dashoffset:-140}}
+.dataDash{stroke-dasharray:5 9;animation:dataflow 1.4s linear infinite}
+@keyframes dataflow{to{stroke-dashoffset:-28}}
+.cloudRing{transform-origin:center;transform-box:fill-box;animation:ringGrow 2.6s ease-out infinite}
+.cloudRing.r2{animation-delay:1.3s}
+@keyframes ringGrow{0%{transform:scale(.4);opacity:.9}100%{transform:scale(1.6);opacity:0}}
+.driftCloud{animation:drift 38s linear infinite}
+.driftCloud.d2{animation-duration:55s;animation-delay:-20s}
+@keyframes drift{from{transform:translateX(-220px)}to{transform:translateX(1600px)}}
+.droneFloat{animation:droneFly 22s ease-in-out infinite}
+@keyframes droneFly{
+  0%   {transform:translate(180px,120px) rotate(0deg)}
+  14%  {transform:translate(330px,96px) rotate(4deg)}
+  28%  {transform:translate(150px,150px) rotate(-4deg)}
+  42%  {transform:translate(420px,110px) rotate(5deg)}
+  54%  {transform:translate(250px,140px) rotate(-3deg)}
+  68%  {transform:translate(780px,70px) rotate(5deg)}
+  78%  {transform:translate(900px,60px) rotate(3deg)}
+  88%  {transform:translate(500px,100px) rotate(-5deg)}
+  100% {transform:translate(180px,120px) rotate(0deg)}
+}
+.rotor{transform-box:fill-box;transform-origin:center;animation:rotorSpin .18s linear infinite}
+.rotor.r2{animation-duration:.16s}.rotor.r3{animation-duration:.2s}.rotor.r4{animation-duration:.15s}
+@keyframes rotorSpin{to{transform:rotate(360deg)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hookGlow{filter:drop-shadow(0 0 8px rgba(255,106,31,.8))}
+.radarSweep{transform-origin:center;transform-box:fill-box;animation:spin 5s linear infinite}
+.floatNode{animation:bob 4.5s ease-in-out infinite}
+.floatNode.f2{animation-delay:1.4s}.floatNode.f3{animation-delay:2.6s}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+
+/* ============ NAV ============ */
+nav.topnav{
+  position:fixed;top:0;left:0;right:0;z-index:60;
+  backdrop-filter:blur(16px);background:rgba(242,246,251,.78);
+  border-bottom:1px solid var(--line);
+  opacity:0;transform:translateY(-100%);pointer-events:none;
+  transition:opacity .4s var(--ease),transform .4s var(--ease);
+}
+nav.topnav.show{opacity:1;transform:none;pointer-events:auto}
+.nav-inner{max-width:var(--maxw);margin:0 auto;padding:13px 24px;display:flex;align-items:center;justify-content:space-between}
+.logo{font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.04em;text-decoration:none;color:var(--blue)}
+.logo span{color:var(--accent)}
+.nav-links{display:flex;gap:26px;align-items:center;list-style:none}
+.nav-links a{font-family:var(--mono);font-size:12px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#4A6285;text-decoration:none;transition:color .2s}
+.nav-links a:hover,.nav-links a:focus-visible{color:var(--accent)}
+.cta{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:#fff!important;background:linear-gradient(135deg,var(--accent),#FF8A3D);padding:10px 16px;border-radius:10px;text-decoration:none;
+  box-shadow:0 8px 24px -8px rgba(255,106,31,.6);transition:transform .2s,box-shadow .2s;
+}
+.cta:hover{transform:translateY(-2px);box-shadow:0 14px 30px -8px rgba(255,106,31,.7)}
+@media(max-width:780px){.nav-links li:not(:last-child){display:none}}
+
+/* ============ HERO ============ */
+.hero{padding:100px 0 14px;position:relative}
+.hero-grid{display:grid;grid-template-columns:.92fr 1.08fr;gap:36px;align-items:center;margin-top:14px}
+@media(max-width:940px){.hero-grid{grid-template-columns:1fr;gap:18px}}
+.hero-scene{min-width:0}
+.hero-scene #epcScene{filter:drop-shadow(0 24px 40px rgba(11,60,122,.18))}
+.hero h1{
+  font-family:var(--display);font-weight:900;color:var(--blue);
+  font-size:clamp(30px,6.4vw,70px);line-height:1.06;letter-spacing:-.015em;margin:8px 0 22px;
+}
+.hero h1 .grad{
+  background:linear-gradient(92deg,var(--accent) 0%,var(--cyan) 55%,var(--blue) 100%);
+  background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;
+  animation:gradslide 6s ease-in-out infinite alternate;display:inline-block;
+}
+@keyframes gradslide{to{background-position:100% 0}}
+.hero-sub{font-size:clamp(15.5px,1.9vw,19px);color:#3D5577;max-width:660px}
+.hero-sub b{color:var(--blue);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.chip{
+  font-family:var(--mono);font-size:12px;font-weight:500;color:var(--blue);
+  border:1.5px solid var(--line2);border-radius:999px;padding:8px 15px;background:rgba(255,255,255,.7);
+  box-shadow:0 4px 14px -6px rgba(11,60,122,.18);
+}
+.chip b{color:var(--accent)}
+
+/* ============ JOURNEY ============ */
+.journey{padding:34px 0 84px}
+
+/* ONE stage: content lives in the sky of the same scene as the road */
+.journey-stage{
+  position:relative;border:1.5px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+  background:linear-gradient(180deg,#F7FBFF,#E9F1FA 62%,#DEE9F6);
+}
+.journey-stage svg{position:relative;z-index:2}
+.stage-deco{position:absolute;inset:0;z-index:1;pointer-events:none}
+.d-sun{
+  position:absolute;top:18px;right:26px;width:56px;height:56px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%,#FFE9BC,#FFC95C);
+  box-shadow:0 0 46px 16px rgba(255,201,92,.5);
+  animation:sunBreathe 5s ease-in-out infinite;
+}
+@keyframes sunBreathe{0%,100%{box-shadow:0 0 40px 12px rgba(255,201,92,.45)}50%{box-shadow:0 0 60px 22px rgba(255,201,92,.6)}}
+.d-cloud{position:absolute;background:#fff;border-radius:999px;opacity:.9;animation:cloudFloat 9s ease-in-out infinite}
+.d-cloud::after{content:"";position:absolute;background:#fff;border-radius:50%;width:55%;height:160%;top:-70%;left:18%}
+.d-cloud::before{content:"";position:absolute;background:#fff;border-radius:50%;width:42%;height:120%;top:-45%;right:14%}
+.d-cloud.c1{width:96px;height:26px;top:42px;right:108px}
+.d-cloud.c2{width:74px;height:20px;top:96px;right:34px;opacity:.7;animation-delay:-4s}
+@keyframes cloudFloat{0%,100%{transform:translateX(0)}50%{transform:translateX(-16px)}}
+.d-bird{position:absolute;font-size:15px;color:var(--blue);opacity:.7;animation:cloudFloat 7s ease-in-out infinite}
+.d-bird.b1{top:30px;right:200px}
+.d-bird.b2{top:64px;right:250px;animation-delay:-3s;font-size:12px}
+
+/* content overlay — borderless, part of the scene */
+/* floating milestone popup that tracks the truck, above the active board */
+.jr-pop{
+  position:absolute;z-index:6;top:6px;left:0;width:min(330px,74%);
+  transform:translateX(-50%);
+  display:flex;align-items:center;
+  padding:13px 18px 13px 20px;border-radius:16px;
+  background:#fff;
+  border:1px solid rgba(13,37,72,.08);
+  box-shadow:0 1px 0 rgba(255,255,255,.9) inset, 0 14px 30px -12px rgba(13,37,72,.32), 0 4px 10px -6px rgba(13,37,72,.2);
+  transition:left .55s var(--ease), opacity .35s var(--ease);
+  pointer-events:none;overflow:hidden;
+}
+/* colored accent rail on the left edge, ties popup to the active milestone */
+.jr-pop::before{
+  content:"";position:absolute;left:0;top:0;bottom:0;width:5px;
+  background:linear-gradient(180deg,var(--accent),#FF8C4D);
+}
+.jr-pop-text{min-width:0;width:100%}
+.jr-pop p#jrBody{
+  color:#0A8F5B;font-size:13.5px;line-height:1.4;font-weight:700;margin:0;letter-spacing:-.005em;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;
+}
+.jr-pop-tail{
+  position:absolute;bottom:-7px;left:50%;transform:translateX(-50%) rotate(45deg);
+  width:15px;height:15px;background:#fff;
+  border-right:1px solid rgba(13,37,72,.08);border-bottom:1px solid rgba(13,37,72,.08);
+}
+.jr-pop-pop{animation:jrPop .5s var(--ease)}
+@keyframes jrPop{0%{opacity:0;transform:translateX(-50%) translateY(9px) scale(.97)}100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
+@media(max-width:760px){
+  .jr-pop{position:static;transform:none;width:auto;margin:14px 14px 0;left:auto!important}
+  .jr-pop-tail{display:none}
+  .jr-pop{transition:opacity .35s var(--ease)}
+  .d-sun{width:40px;height:40px;top:12px;right:16px}
+  .d-cloud.c1{display:none}.d-cloud.c2{display:none}.d-bird{display:none}
+}
+#truck{cursor:grab;pointer-events:auto;touch-action:none}
+#truck:active{cursor:grabbing}
+.journey-hint{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.08em;color:#5B7396}
+
+/* road frame */
+#range{width:100%;height:auto;display:block}
+/* milestone HIGHWAY BOARDS: name on a gantry sign over the road */
+.stopGroup{cursor:pointer}
+.stopGroup .board{transition:transform .45s var(--ease),opacity .35s;transform-origin:bottom center;transform-box:fill-box}
+.stopGroup .boardBg{transition:fill .35s;filter:drop-shadow(0 10px 16px rgba(13,37,72,.34))}
+.stopGroup .boardTxt{transition:fill .35s}
+.stopGroup:hover .board,.stopGroup:focus-visible .board{transform:scale(1.1) translateY(-4px)}
+.stopGroup.active .board{transform:scale(1.18) translateY(-6px)}
+.stopGroup.active .boardBg{fill:var(--accent)}
+.stopGroup.active .boardTxt{fill:#fff}
+.stopGroup.dim .board{opacity:.88}
+.truckBob{animation:truckBob 1.1s ease-in-out infinite}
+@keyframes truckBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+.wheel{transform-origin:center;transform-box:fill-box}
+.sunRays{transform-origin:center;transform-box:fill-box;animation:spin 30s linear infinite}
+.bird{animation:fly 17s linear infinite}
+.bird.b2{animation-duration:24s;animation-delay:-10s}
+@keyframes fly{from{transform:translateX(-120px)}to{transform:translateX(1380px)}}
+.bgSil{opacity:.14}
+
+.journey-ctrl{margin-top:22px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.journey-ctrl .slider-box{flex:1;min-width:220px}
+.jr-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:11.5px;font-weight:500;color:#5B7396;margin-bottom:10px;gap:10px}
+#jrOut{color:var(--accent);font-weight:600;letter-spacing:.06em;text-align:center}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;
+  background:linear-gradient(90deg,var(--accent) var(--fill,0%),rgba(11,60,122,.18) var(--fill,0%));
+  outline:none;cursor:pointer;
+}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;width:26px;height:26px;border-radius:8px;background:var(--accent);
+  border:3px solid #fff;box-shadow:0 0 0 2px var(--accent),0 6px 16px rgba(255,106,31,.5);cursor:grab;
+}
+input[type=range]::-moz-range-thumb{
+  width:26px;height:26px;border-radius:8px;background:var(--accent);
+  border:3px solid #fff;box-shadow:0 0 0 2px var(--accent),0 6px 16px rgba(255,106,31,.5);cursor:grab;
+}
+input[type=range]:focus-visible{outline:3px solid var(--cyan);outline-offset:6px}
+.play-btn{
+  font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+  background:var(--blue);border:none;color:#fff;border-radius:10px;white-space:nowrap;
+  padding:12px 20px;cursor:pointer;transition:background .25s,transform .25s;box-shadow:0 10px 24px -10px rgba(11,60,122,.6);
+}
+.play-btn:hover,.play-btn:focus-visible{background:var(--accent);transform:translateY(-2px)}
+
+/* ============ MARQUEE ============ */
+.marquee{
+  border-top:1.5px solid var(--line);border-bottom:1.5px solid var(--line);
+  background:linear-gradient(90deg,rgba(11,60,122,.05),rgba(8,159,196,.07),rgba(255,106,31,.06));
+  overflow:hidden;padding:15px 0;position:relative;z-index:2;
+}
+.marquee-track{display:flex;width:max-content;animation:marquee 28s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+@keyframes marquee{to{transform:translateX(-50%)}}
+.marquee-track span{
+  font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--blue);padding:0 26px;white-space:nowrap;display:flex;align-items:center;gap:26px;
+}
+.marquee-track span::after{content:"◆";color:var(--accent);font-size:10px}
+
+/* ============ STATS ============ */
+.props{padding:80px 0}
+.props-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+@media(max-width:920px){.props-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:480px){.props-grid{grid-template-columns:1fr}}
+.prop{
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:28px 24px;box-shadow:var(--shadow);position:relative;overflow:hidden;
+  transition:transform .35s var(--ease),border-color .35s;
+}
+.prop:hover{transform:translateY(-6px);border-color:var(--accent)}
+.prop::before{content:"";position:absolute;top:0;left:0;width:100%;height:4px;background:linear-gradient(90deg,var(--accent),var(--cyan))}
+.prop .v{font-family:var(--display);font-weight:700;font-size:clamp(28px,3.2vw,42px);color:var(--blue);line-height:1}
+.prop .v em{color:var(--accent);font-style:normal}
+.prop .k{font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:#5B7396;margin-top:12px}
+.prop svg{position:absolute;right:14px;bottom:12px;width:44px;height:44px;opacity:.85}
+
+/* ============ KPI v3 — single-line stat strip ============ */
+.kpi-strip{
+  display:flex;align-items:stretch;margin-top:32px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;
+}
+.kpi-item{
+  position:relative;flex:1;display:flex;align-items:center;gap:14px;
+  padding:22px 24px;min-width:0;transition:background .3s;
+}
+.kpi-item+.kpi-item::before{content:"";position:absolute;left:0;top:18%;bottom:18%;width:1px;background:var(--line)}
+.kpi-item:hover{background:rgba(11,60,122,.035)}
+.kpi-item .kpi-icon{
+  flex:0 0 auto;width:44px;height:44px;border-radius:12px;
+  background:linear-gradient(150deg,rgba(11,60,122,.08),rgba(8,159,196,.1));
+  display:flex;align-items:center;justify-content:center;
+}
+.kpi-item .kpi-icon svg{width:22px;height:22px}
+.kpi-item .kpi-text{display:flex;flex-direction:column;min-width:0}
+.kpi-item .v{font-family:var(--display);font-weight:700;font-size:clamp(19px,2vw,25px);color:var(--blue);line-height:1;white-space:nowrap}
+.kpi-item .v em{color:var(--accent);font-style:normal}
+.kpi-item .k{font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:#5B7396;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kpi-item.feature{background:linear-gradient(135deg,var(--blue),#123B73)}
+.kpi-item.feature .v{color:#fff}
+.kpi-item.feature .v em{color:var(--accent2)}
+.kpi-item.feature .k{color:var(--blue-soft)}
+.kpi-item.feature .kpi-icon{background:rgba(255,255,255,.14)}
+.kpi-item.feature+.kpi-item::before{display:none}
+@media(max-width:820px){
+  .kpi-strip{flex-wrap:wrap}
+  .kpi-item{flex:1 1 50%;padding:18px}
+  .kpi-item+.kpi-item::before{display:none}
+  .kpi-item:nth-child(odd){border-right:1px solid var(--line)}
+  .kpi-item:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media(max-width:460px){
+  .kpi-item{flex:1 1 100%}
+  .kpi-item:nth-child(odd){border-right:none}
+  .kpi-item:not(:last-child){border-bottom:1px solid var(--line)}
+}
+
+/* ============ PROJECTS + BOLD MENU ============ */
+.proj-layout{display:grid;grid-template-columns:230px minmax(0,1fr);gap:22px;margin-top:40px;align-items:start}
+@media(max-width:900px){.proj-layout{grid-template-columns:1fr;gap:16px}}
+.proj-menu{position:sticky;top:92px}
+.proj-menu ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+.proj-menu a{
+  display:flex;align-items:center;gap:12px;
+  font-family:var(--body);font-size:15px;font-weight:700;letter-spacing:.01em;
+  color:var(--blue);text-decoration:none;padding:13px 16px;border-radius:12px;
+  background:var(--card);border:1.5px solid var(--line);box-shadow:0 6px 18px -10px rgba(11,60,122,.3);
+  transition:transform .3s var(--ease),background .3s,color .3s,border-color .3s,box-shadow .3s;
+  line-height:1.3;
+}
+.proj-menu a .n{
+  font-family:var(--mono);font-size:11px;font-weight:600;flex:0 0 auto;
+  width:26px;height:26px;border-radius:8px;display:grid;place-items:center;
+  background:rgba(11,60,122,.08);color:var(--blue);transition:background .3s,color .3s;
+}
+.proj-menu a:hover{transform:translateX(5px);border-color:var(--cyan)}
+.proj-menu a.active{
+  background:linear-gradient(135deg,var(--accent),#FF8A3D);color:#fff;border-color:transparent;
+  transform:translateX(7px);box-shadow:0 14px 30px -10px rgba(255,106,31,.6);
+}
+.proj-menu a.active .n{background:rgba(255,255,255,.22);color:#fff}
+.proj-menu .pm-head{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--cyan);margin-bottom:12px;padding-left:4px}
+@media(max-width:900px){
+  .proj-menu{position:sticky;top:60px;z-index:30;background:rgba(242,246,251,.94);backdrop-filter:blur(10px);padding:10px 24px;border-bottom:1.5px solid var(--line);margin:0 -24px}
+  .proj-menu ul{flex-direction:row;overflow-x:auto;gap:8px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+  .proj-menu ul::-webkit-scrollbar{display:none}
+  .proj-menu a{white-space:nowrap;padding:10px 14px;font-size:13.5px}
+  .proj-menu a:hover{transform:none}
+  .proj-menu a.active{transform:none}
+  .proj-menu .pm-head{display:none}
+}
+.proj-list{display:flex;flex-direction:column;gap:18px;min-width:0}
+.cap{
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);padding:26px;
+  box-shadow:var(--shadow);position:relative;overflow:hidden;scroll-margin-top:120px;
+  transition:border-color .3s,box-shadow .3s,transform .3s var(--ease);
+}
+.cap:hover{border-color:var(--cyan);box-shadow:0 28px 60px -20px rgba(11,60,122,.35)}
+.cap .cap-head{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.cap .icon{
+  flex:0 0 50px;width:50px;height:50px;border-radius:13px;display:grid;place-items:center;
+  background:linear-gradient(135deg,rgba(255,106,31,.12),rgba(8,159,196,.12));
+  border:1.5px solid var(--line);
+}
+.cap .icon svg{width:28px;height:28px}
+.cap .id{font-family:var(--mono);font-size:10.5px;font-weight:600;letter-spacing:.14em;color:var(--cyan);text-transform:uppercase;display:block;margin-bottom:4px}
+.cap h3{font-family:var(--display);font-size:17.5px;font-weight:700;color:var(--blue);line-height:1.3}
+.cap p{color:#465F84;font-size:14.5px}
+.cap p b{color:var(--blue);font-weight:700}
+.cap .mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.cap .mini span{font-family:var(--mono);font-size:11px;font-weight:500;color:#5B7396;border:1px solid var(--line2);border-radius:7px;padding:5px 10px;background:rgba(11,60,122,.03)}
+
+/* ============ STACK ============ */
+.stack-group{margin-top:34px}
+.stack-group h3{font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--cyan);margin-bottom:15px;display:flex;align-items:center;gap:12px}
+.stack-group h3::after{content:"";flex:1;height:1.5px;background:var(--line)}
+.tags{display:flex;flex-wrap:wrap;gap:10px}
+.tag-chip{
+  font-family:var(--mono);font-size:12.5px;font-weight:500;color:var(--blue);
+  border:1.5px solid var(--line2);border-radius:10px;padding:9px 15px;background:var(--card);
+  box-shadow:0 4px 14px -8px rgba(11,60,122,.25);
+  transition:transform .25s var(--ease),border-color .25s,background .25s,color .25s;cursor:default;
+}
+.tag-chip:hover{transform:translateY(-4px) rotate(-1deg);border-color:var(--accent);color:var(--accent);background:#FFF6F0}
+
+/* ============ EDUCATION ============ */
+.edu-list{display:flex;flex-direction:column;gap:14px;margin-top:40px}
+.edu-row{
+  display:grid;grid-template-columns:120px 1fr auto;align-items:center;gap:22px;
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:22px 26px;box-shadow:var(--shadow);
+  border-left:4px solid var(--accent);transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;
+}
+.edu-row:hover{transform:translateY(-3px);box-shadow:0 22px 56px -20px rgba(11,60,122,.32)}
+.edu-year{font-family:var(--mono);font-size:12.5px;font-weight:600;letter-spacing:.06em;color:var(--cyan)}
+.edu-main h3{font-family:var(--display);font-size:16.5px;font-weight:700;color:var(--blue);margin-bottom:6px;line-height:1.25}
+.edu-deg{font-size:13.5px;font-weight:600;color:#33507A;margin:0;display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+.edu-tag{
+  font-family:var(--mono);font-size:9.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--accent);background:rgba(255,106,31,.1);border:1px solid rgba(255,106,31,.25);
+  padding:2px 8px;border-radius:20px;
+}
+.edu-note{font-size:13px;color:#5B7396;margin:8px 0 0;line-height:1.45}
+.edu-score{text-align:right;min-width:78px}
+.edu-val{display:block;font-family:var(--display);font-weight:700;font-size:24px;color:var(--accent);line-height:1}
+.edu-lbl{display:block;font-family:var(--mono);font-size:9.5px;font-weight:500;letter-spacing:.1em;color:#5B7396;text-transform:uppercase;margin-top:5px}
+@media(max-width:680px){
+  .edu-row{grid-template-columns:1fr auto;gap:10px 16px}
+  .edu-year{grid-column:1 / -1;order:-1}
+  .edu-note{display:none}
+}
+
+/* ============ ACHIEVEMENTS ============ */
+.ach-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:40px}
+@media(max-width:860px){.ach-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:540px){.ach-grid{grid-template-columns:1fr}}
+.ach{
+  display:flex;gap:16px;align-items:flex-start;
+  background:var(--card);border:1.5px solid var(--line);border-radius:var(--radius);
+  padding:22px;box-shadow:var(--shadow);transition:transform .25s var(--ease),border-color .25s,box-shadow .25s;
+}
+.ach:hover{transform:translateY(-4px);border-color:var(--accent);box-shadow:0 22px 56px -20px rgba(11,60,122,.32)}
+.ach-num{
+  flex:0 0 auto;min-width:58px;text-align:center;font-family:var(--display);font-weight:700;
+  font-size:22px;color:var(--accent);line-height:1.1;padding-top:2px;
+}
+.ach-body h3{font-family:var(--display);font-size:14.5px;font-weight:700;color:var(--blue);margin:0 0 5px;line-height:1.25}
+.ach-body p{font-size:12.5px;color:#5B7396;margin:0;line-height:1.45}
+
+/* ============ FINALE + CONTACT ============ */
+.finale{padding:96px 0 0;text-align:center}
+.finale .scene-slot{margin-top:30px}
+.contact{text-align:center;padding:74px 0 64px}
+.contact h2{font-size:clamp(25px,4.4vw,48px)}
+.contact h2 em{font-style:normal;color:var(--accent)}
+.contact .lede{margin:16px auto 36px}
+.contact-row{display:flex;flex-wrap:wrap;justify-content:center;gap:14px}
+.contact-row a{
+  font-family:var(--mono);font-size:13px;font-weight:600;text-decoration:none;color:var(--blue);
+  border:1.5px solid var(--line2);border-radius:12px;padding:15px 24px;display:inline-flex;gap:10px;align-items:center;
+  background:var(--card);box-shadow:var(--shadow);transition:transform .25s var(--ease),border-color .25s;
+}
+.contact-row a:hover,.contact-row a:focus-visible{transform:translateY(-4px);border-color:var(--accent);color:var(--accent)}
+.contact-row a.primary{background:linear-gradient(135deg,var(--accent),#FF8A3D);color:#fff;border-color:transparent}
+.contact-row a.primary:hover{color:#fff;box-shadow:0 16px 40px -10px rgba(255,106,31,.7)}
+footer{border-top:1.5px solid var(--line);padding:24px;text-align:center;font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.12em;color:#6B83A6;text-transform:uppercase;position:relative;z-index:2;background:rgba(255,255,255,.5)}
+
+#page{opacity:1}
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+.reveal.in{opacity:1;transform:none}
+.props-grid .reveal:nth-child(2){transition-delay:.08s}
+.props-grid .reveal:nth-child(3){transition-delay:.16s}
+.props-grid .reveal:nth-child(4){transition-delay:.24s}
+
+@media(max-width:640px){
+  section{padding:70px 0}
+  .hero{padding:120px 0 16px}
+  .journey{padding:36px 0 64px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .reveal,#page{opacity:1;transform:none}
+  #cursorGlow{display:none}
+}
+
+/* ============ SCROLL-SCRUB CANVAS INTRO ============ */
+body.intro-active{overflow-x:hidden}
+
+/* The intro lives in normal document flow at the very top. #introScroll is a
+   tall spacer; #introStage sticks to the viewport while you scroll through it,
+   then scrolls away to reveal #page directly below — one continuous scroll.
+   Scrolling back up brings the video back. */
+#introScroll{position:relative;z-index:150;height:400vh;width:100%}
+#introStage{
+  position:sticky;top:0;z-index:151;background:#0B1B33;
+  height:100vh;width:100%;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+#introCanvas{width:100%;height:100%;object-fit:cover;display:block}
+
+#introStage::after{
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:2;
+  background:
+    linear-gradient(90deg, rgba(6,14,30,.62) 0%, rgba(6,14,30,.30) 26%, rgba(6,14,30,0) 50%),
+    linear-gradient(180deg, rgba(6,14,30,.18) 0%, rgba(6,14,30,0) 30%, rgba(6,14,30,0) 70%, rgba(6,14,30,.55) 100%);
+}
+
+
+/* preloader */
+#introLoad{
+  position:absolute;inset:0;z-index:8;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:18px;background:#0B1B33;
+  transition:opacity .6s ease,visibility .6s;
+}
+#introLoad.hide{opacity:0;visibility:hidden;pointer-events:none}
+#introLoad .il-logo{font-family:var(--display);font-weight:900;font-size:clamp(20px,4vw,34px);letter-spacing:.04em;color:#fff}
+#introLoad .il-logo span{color:var(--accent)}
+#introLoad .il-cap{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.2em;text-transform:uppercase;color:#8FB0DA}
+#introLoad .il-bar{width:min(360px,70vw);height:5px;border-radius:3px;background:rgba(255,255,255,.14);overflow:hidden}
+#introLoad .il-bar i{display:block;height:100%;width:0%;border-radius:3px;background:linear-gradient(90deg,var(--accent),var(--cyan));transition:width .15s linear}
+#introLoad .il-pct{font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.2em;color:var(--cyan)}
+
+/* ---- synced captions: ALL on the LEFT, clear of the centered figure ----
+   The figure sits centre / centre-right in every scene, so captions live in
+   the left column (max ~44% width) and are vertically centred so they never
+   reach the body. A left-anchored scrim guarantees contrast over the busier
+   office frames. */
+.intro-captions{position:absolute;inset:0;z-index:5;pointer-events:none}
+.intro-cap{
+  position:absolute;left:5vw;top:50%;
+  opacity:0;transform:translateY(calc(-50% + 24px));
+  transition:opacity .55s var(--ease),transform .55s var(--ease);
+  width:min(560px,44vw);text-align:left;
+  padding:22px 26px;border-radius:20px;
+  background:radial-gradient(130% 120% at 24% 50%,rgba(6,14,30,.66),rgba(6,14,30,.22) 58%,transparent 82%);
+}
+.intro-cap.show{opacity:1;transform:translateY(-50%)}
+
+.intro-cap .k{
+  font-family:var(--mono);font-size:clamp(12px,1.4vw,15px);font-weight:600;letter-spacing:.26em;text-transform:uppercase;
+  color:#FFB987;margin-bottom:14px;display:block;text-shadow:0 2px 10px rgba(0,0,0,.95);
+}
+.intro-cap .h{
+  font-family:var(--display);font-weight:900;line-height:1.08;letter-spacing:-.012em;
+  font-size:clamp(28px,4.4vw,52px);color:#fff;
+  text-shadow:0 3px 2px rgba(0,0,0,.6),0 8px 30px rgba(0,0,0,.9);
+}
+.intro-cap .h em{font-style:normal;color:#FF8A3D;text-shadow:0 3px 2px rgba(0,0,0,.6),0 8px 30px rgba(0,0,0,.92);}
+.intro-cap .h .hl{
+  display:inline-block;margin-top:.18em;
+  color:#FF7A1F;font-weight:900;
+  /* dark halo + outline so the bright accent reads on any background */
+  text-shadow:
+    0 0 1px rgba(0,0,0,.9),
+    0 2px 2px rgba(0,0,0,.8),
+    0 4px 16px rgba(0,0,0,.85),
+    1px 1px 0 rgba(0,0,0,.55), -1px 1px 0 rgba(0,0,0,.55),
+    1px -1px 0 rgba(0,0,0,.55), -1px -1px 0 rgba(0,0,0,.55);
+  -webkit-text-stroke:.6px rgba(0,0,0,.35);
+}
+.intro-cap.long .h{font-size:clamp(24px,3.2vw,38px);line-height:1.22;font-weight:800}
+.intro-cap.long{width:min(600px,46vw)}
+
+@media(max-width:640px){
+  #introScroll{height:560vh}
+  /* on narrow screens the figure fills more width: drop captions to the
+     lower third, full width, so they stay clear of the body */
+  .intro-cap{left:4vw;right:4vw;top:auto;bottom:13vh;width:auto;
+    transform:translateY(24px);
+    background:radial-gradient(130% 120% at 50% 60%,rgba(6,14,30,.66),rgba(6,14,30,.2) 60%,transparent 84%);}
+  .intro-cap.show{transform:translateY(0)}
+  .intro-cap.long{width:auto}
+  .intro-cap .h{font-size:clamp(24px,6vw,32px)}
+  .intro-cap.long .h{font-size:clamp(20px,5.4vw,26px)}
+}
+
+/* HUD */
+.intro-progress{position:absolute;left:0;right:0;bottom:0;height:5px;z-index:7;background:rgba(255,255,255,.18)}
+.intro-progress i{display:block;height:100%;width:0%;background:linear-gradient(90deg,var(--accent),var(--cyan));box-shadow:0 0 14px rgba(255,106,31,.7)}
+/* bottom-right left/right caption nav */
+.intro-nav{position:absolute;right:26px;bottom:30px;z-index:8;display:flex;gap:12px;pointer-events:auto}
+.inav{
+  width:50px;height:50px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#fff;background:rgba(10,20,40,.5);border:1.6px solid rgba(255,255,255,.42);
+  backdrop-filter:blur(6px);cursor:pointer;transition:background .22s,border-color .22s,transform .18s,opacity .22s;
+}
+.inav:hover{background:rgba(255,106,31,.95);border-color:transparent;transform:translateY(-2px)}
+.inav:active{transform:translateY(0) scale(.94)}
+.inav:disabled{opacity:.32;cursor:default;transform:none;background:rgba(10,20,40,.4);border-color:rgba(255,255,255,.25)}
+.inav svg{display:block}
+@media(max-width:640px){
+  .intro-nav{right:16px;bottom:24px;gap:10px}
+  .inav{width:44px;height:44px}
+}
+.intro-tag{position:absolute;top:24px;left:30px;z-index:7;font-family:var(--display);font-weight:900;font-size:15px;letter-spacing:.04em;color:#fff;text-shadow:0 2px 12px rgba(0,0,0,.7)}
+.intro-tag span{color:var(--accent)}
+.intro-skip{
+  position:absolute;top:22px;right:30px;z-index:7;pointer-events:auto;
+  font-family:var(--mono);font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#fff;
+  background:rgba(10,20,40,.45);border:1.5px solid rgba(255,255,255,.4);backdrop-filter:blur(6px);
+  border-radius:10px;padding:10px 16px;cursor:pointer;transition:background .25s,border-color .25s,transform .2s;
+}
+.intro-skip:hover{background:rgba(255,106,31,.95);border-color:transparent;transform:translateY(-2px)}
+.intro-hint{
+  position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:7;
+  font-family:var(--mono);font-size:11px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;
+  color:rgba(255,255,255,.92);display:flex;align-items:center;gap:10px;text-shadow:0 2px 10px rgba(0,0,0,.7);transition:opacity .4s;
+}
+.intro-hint.fade{opacity:0}
+.intro-hint .scroll-dot{width:20px;height:31px;border:2px solid rgba(255,255,255,.8);border-radius:11px;position:relative;flex:0 0 auto}
+.intro-hint .scroll-dot::before{content:"";position:absolute;left:50%;top:6px;width:3px;height:6px;border-radius:2px;background:#fff;transform:translateX(-50%);animation:introWheel 1.6s ease-in-out infinite}
+@keyframes introWheel{0%{opacity:0;transform:translate(-50%,0)}30%{opacity:1}70%{opacity:1}100%{opacity:0;transform:translate(-50%,11px)}}
+
+@media (prefers-reduced-motion:reduce){
+  #introScroll{height:auto}#introStage{position:relative;height:100vh}
+}
+
+/* ============================================================
+   VISUAL POLISH LAYER — glassmorphism + construction atmosphere
+   ============================================================ */
+.prop,.cap,.edu,.proj-menu a,.contact-row a{
+  background:linear-gradient(160deg, rgba(255,255,255,.80), rgba(255,255,255,.58));
+  backdrop-filter:blur(14px) saturate(140%);
+  -webkit-backdrop-filter:blur(14px) saturate(140%);
+  border-color:rgba(255,255,255,.7);
+  box-shadow:
+    0 18px 50px -22px rgba(11,60,122,.34),
+    inset 0 1px 0 rgba(255,255,255,.75);
+}
+.prop::after,.cap::after,.edu::after{
+  content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:0;
+  background:linear-gradient(180deg, rgba(255,255,255,.4), rgba(255,255,255,0) 40%);
+}
+.cap>*,.edu>*{position:relative;z-index:1}
+.cap:hover,.edu:hover{
+  transform:translateY(-4px);
+  box-shadow:0 34px 70px -26px rgba(11,60,122,.42), inset 0 1px 0 rgba(255,255,255,.85);
+}
+
+/* faint gridded floor inside the number cards */
+.prop{background-image:
+  linear-gradient(160deg, rgba(255,255,255,.82), rgba(255,255,255,.58)),
+  linear-gradient(rgba(11,60,122,.05) 1px,transparent 1px),
+  linear-gradient(90deg,rgba(11,60,122,.05) 1px,transparent 1px);
+  background-size:cover,22px 22px,22px 22px;}
+
+/* construction blueprint watermark icons in section corners */
+.has-bg-icon{position:relative}
+.has-bg-icon>.bg-icon{
+  position:absolute;z-index:0;pointer-events:none;opacity:.06;color:var(--blue);
+  width:min(340px,40vw);height:auto;
+}
+.has-bg-icon>.bg-icon.tr{top:-26px;right:-18px}
+.has-bg-icon>.bg-icon.bl{bottom:-36px;left:-26px;color:var(--accent);opacity:.05}
+.has-bg-icon>.wrap{position:relative;z-index:1}
+
+/* glassy nav */
+.topnav{backdrop-filter:blur(16px) saturate(150%);-webkit-backdrop-filter:blur(16px) saturate(150%);}
+
+@media (prefers-reduced-motion:reduce){ .cap:hover,.edu:hover{transform:none} }
+
+</style>
+</head>
+<body class="intro-active">
+<div id="scrollBar" aria-hidden="true"></div>
+<div id="cursorGlow" aria-hidden="true"></div>
+
+<!-- ================== CANVAS FRAME-SCRUB INTRO ================== -->
+<div id="introScroll" aria-hidden="false">
+<div id="introStage" role="region" aria-label="Intro">
+  <canvas id="introCanvas"></canvas>
+  <div class="intro-tag">V<span>/</span>PRASHANTH</div>
+  <button type="button" class="intro-skip" id="introSkip">Skip intro &rsaquo;</button>
+  <div class="intro-captions" id="introCaps" aria-hidden="true"></div>
+  <div class="intro-hint" id="introHint"><span class="scroll-dot"></span> Scroll to play</div>
+  <div class="intro-progress"><i id="introBar"></i></div>
+  <div class="intro-nav" id="introNav">
+    <button type="button" class="inav prev" id="navPrev" aria-label="Previous">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <button type="button" class="inav next" id="navNext" aria-label="Next">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div id="introLoad">
+    <div class="il-logo">V<span>/</span>PRASHANTH</div>
+    <div class="il-cap">Preparing the experience</div>
+    <div class="il-bar"><i id="ilFill"></i></div>
+    <div class="il-pct" id="ilPct">0%</div>
+  </div>
+</div>
+</div>
+
+<!-- ================== PAGE ================== -->
+<div id="page">
+
+<nav class="topnav" aria-label="Primary">
+  <div class="nav-inner">
+    <a class="logo" href="#top">V<span>/</span>PRASHANTH</a>
+    <ul class="nav-links">
+      <li><a href="#journey">Journey</a></li>
+      <li><a href="#kpi">KPI</a></li>
+      <li><a href="#work">Projects</a></li>
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#education">Education</a></li>
+      <li><a href="#achievements">Awards</a></li>
+      <li><a class="cta" href="mailto:prashanthviswanatham@gmail.com">Hire me</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap">
+    <p class="eyebrow">Digital Project Delivery × Data Engineering · IIT Madras</p>
+ <h1>
+  I Deliver EPC projects, end-to-end, <span class="grad">Digitally</span>.
+</h1>
+    <div class="hero-grid">
+      <div>
+        <p class="hero-sub">With a unique blend of engineering, technology, and project management expertise, I drive digital transformation across large-scale EPC projects. Leveraging <b>BIM, cloud platforms, analytics, and automation</b>, I enable connected workflows, data-driven decision-making, and efficient project execution from design through construction.</p>
+        <div class="chips">
+          <span class="chip"><b>▸</b> Manager · Tata Projects, Central Engineering</span>
+          <span class="chip"><b>▸</b> ACC / APS · Power BI · Python · Fabric</span>
+          <span class="chip"><b>▸</b> 3+ yrs site + corporate</span>
+        </div>
+      </div>
+      <div class="hero-scene scene-holder" id="sceneHeroSlot"><svg id="epcScene" viewBox="0 0 1440 560" preserveAspectRatio="xMidYMax meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <defs>
+        <linearGradient id="bldg" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#1B5AA8"/><stop offset="1" stop-color="#0B3C7A"/>
+        </linearGradient>
+        <linearGradient id="bldg2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7FA8D8"/><stop offset="1" stop-color="#4F7FBC"/>
+        </linearGradient>
+        <linearGradient id="beamGrad" x1="0" y1="1" x2="0" y2="0">
+          <stop offset="0" stop-color="rgba(8,159,196,0)"/><stop offset="1" stop-color="rgba(8,159,196,.55)"/>
+        </linearGradient>
+        <linearGradient id="groundGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="rgba(11,60,122,.10)"/><stop offset="1" stop-color="rgba(11,60,122,0)"/>
+        </linearGradient>
+      </defs>
+      <g class="driftCloud" stroke="#9FBADE" stroke-width="1.6" fill="rgba(255,255,255,.7)" stroke-dasharray="6 5" opacity=".8">
+        <path d="M120 80 q14 -26 42 -20 q10 -24 38 -16 q26 -8 34 16 q26 2 22 24 q-4 18 -28 16 l-86 0 q-26 -2 -22 -20 Z"/>
+      </g>
+      <g class="driftCloud d2" stroke="#9FBADE" stroke-width="1.6" fill="rgba(255,255,255,.7)" stroke-dasharray="6 5" opacity=".6">
+        <path d="M420 40 q12 -22 36 -17 q9 -20 33 -13 q22 -7 29 13 q22 2 19 20 q-3 16 -24 14 l-74 0 q-22 -2 -19 -17 Z"/>
+      </g>
+      <g transform="translate(1150,90)">
+        <circle class="cloudRing" r="26" fill="none" stroke="#089FC4" stroke-width="2"/>
+        <circle class="cloudRing r2" r="26" fill="none" stroke="#FF6A1F" stroke-width="2"/>
+        <path d="M-34 14 q-16 0 -16 -14 q0 -13 13 -14 q3 -16 20 -16 q12 0 17 9 q4 -3 10 -3 q14 0 15 13 q11 2 11 13 q0 12 -14 12 Z" fill="#fff" stroke="#0B3C7A" stroke-width="2.5"/>
+        <text x="0" y="6" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#0B3C7A">CDE</text>
+        <text x="0" y="44" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="10" letter-spacing="2" fill="#5B7396">COMMON DATA ENV</text>
+      </g>
+      <path class="dataDash" d="M610 150 C 760 60, 950 60, 1100 92" fill="none" stroke="#089FC4" stroke-width="2"/>
+      <path class="dataDash" d="M315 250 C 560 110, 880 80, 1098 100" fill="none" stroke="#FF6A1F" stroke-width="2" style="animation-duration:1.9s"/>
+      <path class="dataDash" d="M1010 330 C 1060 240, 1090 180, 1132 122" fill="none" stroke="#089FC4" stroke-width="2" style="animation-duration:1.1s"/>
+      <g class="floatNode" transform="translate(700,210)">
+        <rect x="-34" y="-16" width="68" height="32" rx="8" fill="#fff" stroke="#089FC4" stroke-width="2"/>
+        <text x="0" y="5" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#089FC4">{ API }</text>
+      </g>
+      <g class="floatNode f2" transform="translate(840,150)">
+        <rect x="-30" y="-16" width="60" height="32" rx="8" fill="#fff" stroke="#FF6A1F" stroke-width="2"/>
+        <text x="0" y="5" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#FF6A1F">4D ▦</text>
+      </g>
+      <g class="floatNode f3" transform="translate(960,210)">
+        <rect x="-34" y="-16" width="68" height="32" rx="8" fill="#fff" stroke="#0B3C7A" stroke-width="2"/>
+        <text x="0" y="5" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#0B3C7A">SQL ⌁</text>
+      </g>
+      <rect x="0" y="500" width="1440" height="60" fill="url(#groundGrad)"/>
+      <line x1="0" y1="500" x2="1440" y2="500" stroke="#0B3C7A" stroke-width="2.5"/>
+      <g>
+        <rect x="120" y="380" width="200" height="120" fill="url(#bldg)" rx="3"/>
+        <g fill="rgba(255,255,255,.85)">
+          <rect x="138" y="398" width="26" height="18" rx="2"/><rect x="178" y="398" width="26" height="18" rx="2"/>
+          <rect x="218" y="398" width="26" height="18" rx="2"/><rect x="258" y="398" width="26" height="18" rx="2"/>
+          <rect x="138" y="438" width="26" height="18" rx="2"/><rect x="178" y="438" width="26" height="18" rx="2"/>
+          <rect x="218" y="438" width="26" height="18" rx="2"/><rect x="258" y="438" width="26" height="18" rx="2" fill="#FFD9A8"/>
+          <rect x="138" y="472" width="26" height="18" rx="2" fill="#FFD9A8"/><rect x="218" y="472" width="26" height="18" rx="2"/>
+        </g>
+        <g fill="none" stroke="#089FC4" stroke-width="2" stroke-dasharray="8 6">
+          <rect class="scanFloor" x="124" y="330" width="192" height="44" rx="3"/>
+          <rect class="scanFloor s2" x="128" y="282" width="184" height="42" rx="3"/>
+          <rect class="scanFloor s3" x="132" y="236" width="176" height="40" rx="3"/>
+        </g>
+        <rect class="scanBeam" x="118" y="360" width="204" height="22" fill="url(#beamGrad)"/>
+        <text x="220" y="535" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2.5" fill="#5B7396">BIM-FIRST DELIVERY</text>
+      </g>
+      <g>
+        <rect x="380" y="430" width="130" height="70" fill="url(#bldg2)" rx="3"/>
+        <g fill="rgba(255,255,255,.8)">
+          <rect x="394" y="444" width="20" height="14" rx="2"/><rect x="424" y="444" width="20" height="14" rx="2"/><rect x="454" y="444" width="20" height="14" rx="2"/>
+          <rect x="394" y="470" width="20" height="14" rx="2"/><rect x="454" y="470" width="20" height="14" rx="2"/>
+        </g>
+        <g transform="translate(445,418)">
+          <line x1="0" y1="12" x2="0" y2="0" stroke="#0B3C7A" stroke-width="3"/>
+          <g class="radarSweep"><path d="M0 0 L26 -14 A30 30 0 0 0 14 -26 Z" fill="rgba(8,159,196,.35)"/></g>
+          <circle r="4" fill="#FF6A1F"/>
+        </g>
+      </g>
+      <g>
+        <g stroke="#FF6A1F" stroke-width="3" fill="none">
+          <line x1="585" y1="500" x2="585" y2="160"/><line x1="615" y1="500" x2="615" y2="160"/>
+        </g>
+        <g stroke="#FF8C4D" stroke-width="2">
+          <line x1="585" y1="480" x2="615" y2="455"/><line x1="615" y1="480" x2="585" y2="455"/>
+          <line x1="585" y1="440" x2="615" y2="415"/><line x1="615" y1="440" x2="585" y2="415"/>
+          <line x1="585" y1="400" x2="615" y2="375"/><line x1="615" y1="400" x2="585" y2="375"/>
+          <line x1="585" y1="360" x2="615" y2="335"/><line x1="615" y1="360" x2="585" y2="335"/>
+          <line x1="585" y1="320" x2="615" y2="295"/><line x1="615" y1="320" x2="585" y2="295"/>
+          <line x1="585" y1="280" x2="615" y2="255"/><line x1="615" y1="280" x2="585" y2="255"/>
+          <line x1="585" y1="240" x2="615" y2="215"/><line x1="615" y1="240" x2="585" y2="215"/>
+          <line x1="585" y1="200" x2="615" y2="175"/><line x1="615" y1="200" x2="585" y2="175"/>
+        </g>
+        <rect x="565" y="495" width="70" height="12" fill="#0B3C7A" rx="2"/>
+        <rect x="572" y="138" width="56" height="34" rx="5" fill="#0B3C7A"/>
+        <rect x="580" y="146" width="22" height="14" rx="2" fill="#BFE3F2"/>
+        <line x1="600" y1="150" x2="960" y2="150" stroke="#FF6A1F" stroke-width="4"/>
+        <line x1="600" y1="132" x2="950" y2="146" stroke="#FF8C4D" stroke-width="2"/>
+        <g stroke="#FF8C4D" stroke-width="1.6">
+          <line x1="660" y1="150" x2="640" y2="133"/><line x1="720" y1="150" x2="700" y2="135"/>
+          <line x1="780" y1="150" x2="760" y2="138"/><line x1="840" y1="150" x2="820" y2="141"/>
+          <line x1="900" y1="150" x2="880" y2="143"/>
+        </g>
+        <line x1="600" y1="150" x2="470" y2="150" stroke="#FF6A1F" stroke-width="4"/>
+        <rect x="468" y="150" width="40" height="26" fill="#0B3C7A" rx="3"/>
+        <line x1="600" y1="150" x2="600" y2="96" stroke="#FF6A1F" stroke-width="3.5"/>
+        <line x1="600" y1="96" x2="940" y2="146" stroke="#0D2548" stroke-width="1.6"/>
+        <line x1="600" y1="96" x2="480" y2="148" stroke="#0D2548" stroke-width="1.6"/>
+        <circle class="crane-blink" cx="600" cy="90" r="5" fill="#E1262D"/>
+        <g class="trolley">
+          <rect x="660" y="148" width="26" height="12" rx="3" fill="#0B3C7A"/>
+          <line x1="673" y1="160" x2="673" y2="300" stroke="#0D2548" stroke-width="1.8">
+            <animate attributeName="y2" values="300;420;420;300;260;300" keyTimes="0;.3;.55;.75;.9;1" dur="12s" repeatCount="indefinite"/>
+          </line>
+          <g class="hookGlow">
+            <rect x="655" y="300" width="36" height="30" rx="5" fill="#FF6A1F">
+              <animate attributeName="y" values="300;420;420;300;260;300" keyTimes="0;.3;.55;.75;.9;1" dur="12s" repeatCount="indefinite"/>
+            </rect>
+            <rect x="661" y="306" width="24" height="8" rx="2" fill="#FFE0C2">
+              <animate attributeName="y" values="306;426;426;306;266;306" keyTimes="0;.3;.55;.75;.9;1" dur="12s" repeatCount="indefinite"/>
+            </rect>
+          </g>
+        </g>
+        <text x="600" y="535" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2.5" fill="#5B7396">EPC EXECUTION</text>
+      </g>
+      <g stroke="#0B3C7A" stroke-width="2.5" fill="none">
+        <path d="M1040 500 L1060 300 L1080 300 L1100 500"/>
+        <line x1="1048" y1="430" x2="1092" y2="430"/><line x1="1054" y1="370" x2="1086" y2="370"/>
+        <line x1="1048" y1="430" x2="1086" y2="370"/><line x1="1092" y1="430" x2="1054" y2="370"/>
+        <line x1="1054" y1="370" x2="1080" y2="300"/><line x1="1086" y1="370" x2="1060" y2="300"/>
+        <line x1="1030" y1="330" x2="1110" y2="330"/>
+        <line x1="1062" y1="300" x2="1078" y2="280"/><line x1="1078" y1="300" x2="1062" y2="280"/>
+        <line x1="1070" y1="280" x2="1070" y2="265"/>
+        <path d="M1300 500 L1320 300 L1340 300 L1360 500"/>
+        <line x1="1308" y1="430" x2="1352" y2="430"/><line x1="1314" y1="370" x2="1346" y2="370"/>
+        <line x1="1308" y1="430" x2="1346" y2="370"/><line x1="1352" y1="430" x2="1314" y2="370"/>
+        <line x1="1314" y1="370" x2="1340" y2="300"/><line x1="1346" y1="370" x2="1320" y2="300"/>
+        <line x1="1290" y1="330" x2="1370" y2="330"/>
+        <line x1="1322" y1="300" x2="1338" y2="280"/><line x1="1338" y1="300" x2="1322" y2="280"/>
+        <line x1="1330" y1="280" x2="1330" y2="265"/>
+      </g>
+      <path d="M1030 332 Q1180 392 1290 332" fill="none" stroke="#9FBADE" stroke-width="2"/>
+      <path d="M1110 332 Q1235 386 1370 332" fill="none" stroke="#9FBADE" stroke-width="2"/>
+      <path d="M1070 267 Q1200 322 1330 267" fill="none" stroke="#9FBADE" stroke-width="2"/>
+      <path class="wirePulse" d="M1030 332 Q1180 392 1290 332" fill="none" stroke="#FF6A1F" stroke-width="3" stroke-linecap="round"/>
+      <path class="wirePulse w2" d="M1110 332 Q1235 386 1370 332" fill="none" stroke="#089FC4" stroke-width="3" stroke-linecap="round"/>
+      <path class="wirePulse w3" d="M1070 267 Q1200 322 1330 267" fill="none" stroke="#FF6A1F" stroke-width="3" stroke-linecap="round"/>
+      <text x="1200" y="535" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" letter-spacing="2.5" fill="#5B7396">400 kV T&amp;D</text>
+      <g class="droneFloat" transform="translate(180,120)">
+        <!-- subtle scan beam under the drone -->
+        <path d="M0 14 L-20 46 L20 46 Z" fill="rgba(8,159,196,.1)"/>
+        <!-- arms -->
+        <g stroke="#0B3C7A" stroke-width="4" stroke-linecap="round">
+          <line x1="-13" y1="2" x2="-34" y2="-12"/>
+          <line x1="13" y1="2" x2="34" y2="-12"/>
+          <line x1="-13" y1="8" x2="-30" y2="22"/>
+          <line x1="13" y1="8" x2="30" y2="22"/>
+        </g>
+        <!-- rotor motors + spinning blades -->
+        <g transform="translate(-34,-12)">
+          <circle r="3.4" fill="#0B3C7A"/>
+          <g class="rotor"><ellipse rx="15" ry="3.4" fill="#FF6A1F" opacity=".85"/></g>
+        </g>
+        <g transform="translate(34,-12)">
+          <circle r="3.4" fill="#0B3C7A"/>
+          <g class="rotor r2"><ellipse rx="15" ry="3.4" fill="#089FC4" opacity=".85"/></g>
+        </g>
+        <g transform="translate(-30,22)">
+          <circle r="3.4" fill="#0B3C7A"/>
+          <g class="rotor r3"><ellipse rx="15" ry="3.4" fill="#089FC4" opacity=".85"/></g>
+        </g>
+        <g transform="translate(30,22)">
+          <circle r="3.4" fill="#0B3C7A"/>
+          <g class="rotor r4"><ellipse rx="15" ry="3.4" fill="#FF6A1F" opacity=".85"/></g>
+        </g>
+        <!-- body -->
+        <rect x="-15" y="-6" width="30" height="18" rx="6" fill="#0B3C7A"/>
+        <rect x="-9" y="-2" width="18" height="7" rx="2" fill="#BFE3F2"/>
+        <!-- camera gimbal -->
+        <circle cx="0" cy="14" r="4.5" fill="#0D2548"/>
+        <circle cx="0" cy="14" r="1.8" fill="#FF6A1F"/>
+      </g>
+    </svg></div>
+    </div>
+  </div>
+</header>
+
+<!-- ======= JOURNEY : HORIZONTAL HIGHWAY ======= -->
+<section class="journey" id="journey">
+  <div class="wrap">
+    <p class="eyebrow">The journey · 2018 → now</p>
+    <h2>My Journey</h2>
+
+    <!-- ONE immersive stage: milestone story in the sky, highway below -->
+    <div class="journey-stage reveal">
+      <div class="stage-deco" aria-hidden="true">
+        <span class="d-sun"></span>
+        <span class="d-cloud c1"></span>
+        <span class="d-cloud c2"></span>
+        <span class="d-bird b1">⌒⌒</span>
+        <span class="d-bird b2">⌒⌒</span>
+      </div>
+
+      <div class="jr-pop" id="jrCard" aria-live="polite">
+        <div class="jr-pop-text">
+          <p id="jrBody">Engineering foundation built at India’s top institute.</p>
+        </div>
+        <span class="jr-pop-tail" aria-hidden="true"></span>
+      </div>
+
+      <svg id="range" viewBox="0 55 1200 415" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Highway timeline — each disc is a career milestone, the truck drives through them continuously">
+        <defs>
+          <linearGradient id="roadG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#33507A"/><stop offset="1" stop-color="#22395C"/>
+          </linearGradient>
+          <linearGradient id="trailG" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#FF6A1F" stop-opacity=".15"/><stop offset="1" stop-color="#FF6A1F"/>
+          </linearGradient>
+          <linearGradient id="boardG" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#1660B8"/><stop offset="1" stop-color="#0E4C97"/>
+          </linearGradient>
+        </defs>
+
+        <!-- elegant EPC silhouettes (decorative, faint) -->
+        <g class="bgSil" stroke="#0B3C7A" stroke-width="3" fill="none" stroke-linecap="round">
+          <line x1="48" y1="400" x2="48" y2="180"/>
+          <line x1="48" y1="190" x2="190" y2="190"/>
+          <line x1="48" y1="190" x2="10" y2="190"/>
+          <line x1="48" y1="160" x2="48" y2="190"/>
+          <line x1="48" y1="160" x2="182" y2="186"/>
+          <line x1="48" y1="160" x2="14" y2="188"/>
+          <line x1="150" y1="190" x2="150" y2="236"/>
+          <rect x="140" y="236" width="20" height="16" rx="3" fill="#0B3C7A" stroke="none"/>
+          <path d="M1118 400 L1132 240 L1146 240 L1160 400"/>
+          <line x1="1104" y1="262" x2="1174" y2="262"/>
+          <line x1="1124" y1="322" x2="1154" y2="322"/>
+          <line x1="1124" y1="322" x2="1152" y2="264"/><line x1="1154" y1="322" x2="1126" y2="264"/>
+        </g>
+
+
+
+        <!-- HORIZONTAL ROAD -->
+        <rect x="0" y="400" width="1200" height="40" fill="url(#roadG)"/>
+        <line x1="0" y1="420" x2="1200" y2="420" stroke="#F2F6FB" stroke-width="3.5" stroke-dasharray="20 17"/>
+        <!-- glowing progress trail -->
+        <line id="trail" x1="60" y1="395" x2="60" y2="395" stroke="url(#trailG)" stroke-width="6" stroke-linecap="round"/>
+        <!-- finish flag -->
+        <g transform="translate(1166,400)">
+          <line x1="0" y1="0" x2="0" y2="-42" stroke="#0D2548" stroke-width="3.5"/>
+          <path d="M0 -42 L30 -33 L0 -24 Z" fill="#FF6A1F"/>
+        </g>
+
+        <!-- milestone stops (built by JS) -->
+        <g id="stops"></g>
+
+        <!-- TRUCK (scaled up, draggable) -->
+        <g id="truck">
+          <rect x="-78" y="-70" width="146" height="92" fill="transparent"/>
+          <g transform="scale(1.45)">
+          <g class="truckBob">
+            <rect x="-46" y="-34" width="52" height="30" rx="4" fill="#0B3C7A"/>
+            <text x="-20" y="-14" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#fff">V/P</text>
+            <path d="M8 -4 L8 -30 L26 -30 L38 -18 L38 -4 Z" fill="#FF6A1F"/>
+            <path d="M12 -26 L24 -26 L31 -18 L12 -18 Z" fill="#BFE3F2"/>
+            <rect x="36" y="-12" width="5" height="5" rx="1" fill="#FFC95C"/>
+            <g fill="#9FBADE" opacity=".7">
+              <circle cx="-52" cy="-38" r="3"><animate attributeName="cy" values="-38;-50" dur="1.6s" repeatCount="indefinite"/><animate attributeName="opacity" values=".7;0" dur="1.6s" repeatCount="indefinite"/></circle>
+              <circle cx="-55" cy="-38" r="2.2"><animate attributeName="cy" values="-38;-48" dur="1.6s" begin=".8s" repeatCount="indefinite"/><animate attributeName="opacity" values=".6;0" dur="1.6s" begin=".8s" repeatCount="indefinite"/></circle>
+            </g>
+            <g class="wheel" id="wheel1" transform="translate(-32,0)">
+              <circle r="8.5" fill="#0D2548"/><circle r="3.6" fill="#F2F6FB"/>
+              <line x1="0" y1="-7" x2="0" y2="7" stroke="#F2F6FB" stroke-width="1.6"/>
+              <line x1="-7" y1="0" x2="7" y2="0" stroke="#F2F6FB" stroke-width="1.6"/>
+            </g>
+            <g class="wheel" id="wheel2" transform="translate(24,0)">
+              <circle r="8.5" fill="#0D2548"/><circle r="3.6" fill="#F2F6FB"/>
+              <line x1="0" y1="-7" x2="0" y2="7" stroke="#F2F6FB" stroke-width="1.6"/>
+              <line x1="-7" y1="0" x2="7" y2="0" stroke="#F2F6FB" stroke-width="1.6"/>
+            </g>
+          </g>
+          </g>
+        </g>
+      </svg>
+    </div><!-- /journey-stage -->
+
+    <div class="journey-ctrl reveal" style="justify-content:space-between">
+      <span id="jrOut" style="font-family:var(--mono);font-size:12.5px;font-weight:600;color:var(--accent);letter-spacing:.06em">MILESTONE 1 / 6</span>
+      <span class="journey-hint">🚚 Drag the truck along the road · tap any board to jump</span>
+      <button class="play-btn" id="playBtn" type="button">⏸ Auto-driving</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======= MARQUEE ======= -->
+<div class="marquee" aria-label="Projects delivered on">
+  <div class="marquee-track" id="marqueeTrack">
+    <span>Air India MRO</span><span>Metro Projects</span><span>Google Data Center</span><span>TMU — The Manufacturing Unit</span><span>400 kV Kharghar–Vikhroli</span><span>Autodesk Construction Cloud</span><span>Microsoft Fabric</span><span>Synchro 4D</span>
+  </div>
+</div>
+
+<!-- ======= STATS ======= -->
+<section class="props" id="kpi" aria-label="Key numbers" style="padding:48px 0">
+  <div class="wrap">
+    <p class="eyebrow">Impact at a glance</p>
+    <h2 style="margin-bottom:0">Numbers that back the story</h2>
+
+    <div class="kpi-strip">
+      <div class="kpi-item feature reveal">
+        <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><path d="M15 3c-4.5 2.5-7.5 3-11.5 3 0 11.5 4.5 18 11.5 23 7-5 11.5-11.5 11.5-23-4 0-7-.5-11.5-3Z" stroke="#fff" stroke-width="2"/><path d="M10.5 15h9M15 10.5v9" stroke="#FF8C4D" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div class="kpi-text">
+          <div class="v">₹<span data-count="2">0</span><em>Cr</em></div>
+          <div class="k">Cost savings achieved</div>
+        </div>
+      </div>
+      <div class="kpi-item reveal">
+        <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="16" width="5" height="10" rx="1.5" fill="#FF6A1F"/><rect x="12.5" y="10" width="5" height="16" rx="1.5" fill="#089FC4"/><rect x="21" y="4" width="5" height="22" rx="1.5" fill="#0B3C7A"/></svg></div>
+        <div class="kpi-text">
+          <div class="v"><span data-count="10">0</span><em>+</em></div>
+          <div class="k">Dashboards developed</div>
+        </div>
+      </div>
+      <div class="kpi-item reveal">
+        <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#0B3C7A" stroke-width="2.4"/><path d="M15 5 a10 10 0 0 1 9.6 12.8" stroke="#FF6A1F" stroke-width="2.4" stroke-linecap="round"/><circle cx="15" cy="15" r="3" fill="#089FC4"/></svg></div>
+        <div class="kpi-text">
+          <div class="v"><span data-count="8">0</span><em>+</em></div>
+          <div class="k">Projects Delivered</div>
+        </div>
+      </div>
+      <div class="kpi-item reveal">
+        <div class="kpi-icon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="4" width="9.5" height="9.5" rx="2.4" stroke="#0B3C7A" stroke-width="2.2"/><rect x="16.5" y="4" width="9.5" height="9.5" rx="2.4" stroke="#089FC4" stroke-width="2.2"/><rect x="4" y="16.5" width="9.5" height="9.5" rx="2.4" stroke="#089FC4" stroke-width="2.2"/><rect x="16.5" y="16.5" width="9.5" height="9.5" rx="2.4" stroke="#FF6A1F" stroke-width="2.2"/></svg></div>
+        <div class="kpi-text">
+          <div class="v"><span data-count="10">0</span><em>+</em></div>
+          <div class="k">Digital Tools used</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= PROJECTS w/ BOLD MENU ======= -->
+<section id="work" class="has-bg-icon" style="padding-top:36px">
+  <svg class="bg-icon tr" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+    <path d="M20 110V20l70 14M20 20l40 8M20 36l40 8M20 52l40 8"/><path d="M14 110h28M28 110V92a8 8 0 0116 0"/><path d="M90 34l18 4M90 34v14l10 6"/><circle cx="100" cy="60" r="4"/>
+  </svg>
+  <div class="wrap">
+    <p class="eyebrow">What I carry</p>
+    <h2>Projects &amp; capability stacks</h2>
+    <p class="lede">Everything below is shipped and in production — at Tata Projects, on site, and in the lab.</p>
+
+    <div class="proj-layout">
+      <aside class="proj-menu" aria-label="Project navigation">
+        <div class="pm-head">Navigate</div>
+        <ul id="projMenu">
+          <li><a href="#p-cde" class="active"><span class="n">01</span>Digital Delivery</a></li>
+          <li><a href="#p-analytics"><span class="n">02</span>Analytics &amp; Automation</a></li>
+          <li><a href="#p-process"><span class="n">03</span>Process Re-engineering</a></li>
+          <li><a href="#p-web"><span class="n">04</span>Web Development</a></li>
+          <li><a href="#p-site"><span class="n">05</span>T&amp;D Site Execution</a></li>
+          <li><a href="#p-ai"><span class="n">06</span>AI Research</a></li>
+        </ul>
+      </aside>
+
+      <div class="proj-list">
+        <article class="cap reveal" id="p-cde">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="10" height="14" rx="1.5" stroke="#0B3C7A" stroke-width="2"/><rect x="17" y="6" width="10" height="21" rx="1.5" stroke="#FF6A1F" stroke-width="2" stroke-dasharray="4 3"/><line x1="13" y1="18" x2="17" y2="18" stroke="#089FC4" stroke-width="2"/></svg></div>
+            <div><span class="id">01 · Digital Project Delivery · Tata Projects</span><h3>End-to-end Digital Project Delivery in EPC projects</h3></div>
+          </div>
+<p style="margin-bottom: 20px;">
+    Implemented end-to-end digital project delivery from design through construction across major EPC projects, including <b>Air India MRO, Metro projects, Google Data Center, and TMU</b>. Deployed <b>Autodesk Construction Cloud (ACC)</b> as the Common Data Environment, <b>Collaborate Pro</b> for <b>BIM-first model reviews</b>, <b>cloud-based collaboration</b>, and <b>interdisciplinary coordination</b>, and <b>Visilean</b> for lean construction management.
+</p>
+
+<p>
+    Established an <b>integrated digital delivery ecosystem</b> that enhanced <b>collaboration</b>, strengthened <b>project controls</b>, and drove successful <b>user adoption</b> through <b>structured training</b> and <b>change management</b>.
+</p>          <div class="mini"><span>ACC Docs</span><span>Collaborate Pro</span><span>ACC Build</span><span>Clash detection</span><span>3D reviews</span></div>
+        </article>
+
+        <article class="cap reveal" id="p-analytics">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#0B3C7A" stroke-width="2"/><path d="M15 4 A11 11 0 0 1 26 15 L15 15 Z" fill="#FF6A1F"/><circle cx="15" cy="15" r="4" fill="#089FC4"/></svg></div>
+            <div><span class="id">02 · Analytics &amp; Automation · Tata Projects</span><h3>Dashboards that replace manual reporting</h3></div>
+          </div>
+          <p>Built <b>Power BI</b> dashboards tracking engineering, procurement &amp; construction from <b>APIs and Lakehouse</b> sources with <b>Python, SQL, PySpark and Fabric pipelines</b> — model-based <b>planned-vs-actual</b> quantity tracking, <b>4D simulation dashboards</b> for time-linked progress, and APS + Power Automate automations saving hours of manual effort every day.</p>
+          <div class="mini"><span>Power BI</span><span>Fabric</span><span>PySpark</span><span>APS</span><span>Power Automate</span></div>
+        </article>
+
+        <article class="cap reveal" id="p-process">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="10" stroke="#0B3C7A" stroke-width="2"/><circle cx="15" cy="15" r="3.5" fill="#FF6A1F"/><line x1="15" y1="2" x2="15" y2="7" stroke="#089FC4" stroke-width="2.5"/><line x1="15" y1="23" x2="15" y2="28" stroke="#089FC4" stroke-width="2.5"/><line x1="2" y1="15" x2="7" y2="15" stroke="#089FC4" stroke-width="2.5"/><line x1="23" y1="15" x2="28" y2="15" stroke="#089FC4" stroke-width="2.5"/></svg></div>
+            <div><span class="id">03 · Process Re-engineering · Enterprise level</span><h3>Systems that scale beyond one project</h3></div>
+          </div>
+          <p>Institutionalised engineering processes, <b>BIM standards</b> and vendor evaluation frameworks across the enterprise. Strategised and implemented a <b>skill competency matrix platform</b> with discipline-wise capability health cards and resource-loading charts — driving targeted upskilling, efficient allocation and informed hiring plans.</p>
+          <div class="mini"><span>BIM standards</span><span>Vendor frameworks</span><span>Capability mapping</span><span>Resource loading</span></div>
+        </article>
+
+        <article class="cap reveal" id="p-web">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><path d="M10 8 L4 15 L10 22" stroke="#FF6A1F" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 8 L26 15 L20 22" stroke="#0B3C7A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><line x1="16.5" y1="6" x2="13.5" y2="24" stroke="#089FC4" stroke-width="2.5" stroke-linecap="round"/></svg></div>
+            <div><span class="id">04 · Web Development · TPL Digital Month</span><h3>Interfaces people actually use</h3></div>
+          </div>
+          <p>Designed, developed and deployed an <b>interactive landing site for TPL's Digital Month</b> — dynamic calendars, advanced controls and fully responsive design in <b>HTML, CSS and JavaScript</b>, built to elevate user experience and drive participation across the organisation.</p>
+          <div class="mini"><span>HTML</span><span>CSS</span><span>JavaScript</span><span>Responsive design</span></div>
+        </article>
+
+        <article class="cap reveal" id="p-site">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><path d="M9 27 L13 6 L17 6 L21 27" stroke="#0B3C7A" stroke-width="2"/><line x1="10.5" y1="20" x2="19.5" y2="20" stroke="#0B3C7A" stroke-width="2"/><line x1="7" y1="10" x2="23" y2="10" stroke="#0B3C7A" stroke-width="2"/><path d="M2 10 Q8 16 15 10" stroke="#FF6A1F" stroke-width="2" fill="none"/><path d="M15 10 Q22 16 28 10" stroke="#089FC4" stroke-width="2" fill="none"/></svg></div>
+            <div><span class="id">05 · Site Execution · Tata Projects T&amp;D · Aug '23 – Feb '24</span><h3>400 kV Kharghar–Vikhroli line</h3></div>
+          </div>
+          <p>Executed a high-complexity transmission line through <b>creek crossings, mangroves, hilly terrain, road and railway crossings</b> — coordinating foundations, tower erection and stringing, plus JMCs, client approvals, billing quantity take-offs and quality closure — contributing to <b>on-time completion with healthy margins</b>.</p>
+          <div class="mini"><span>Execution</span><span>Planning</span><span>Billing</span><span>Quality</span></div>
+        </article>
+
+        <article class="cap reveal" id="p-ai">
+          <div class="cap-head">
+            <div class="icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="8" cy="8" r="3" fill="#089FC4"/><circle cx="8" cy="22" r="3" fill="#089FC4"/><circle cx="22" cy="15" r="3" fill="#FF6A1F"/><line x1="10.5" y1="9.5" x2="19.5" y2="13.8" stroke="#0B3C7A" stroke-width="2"/><line x1="10.5" y1="20.5" x2="19.5" y2="16.2" stroke="#0B3C7A" stroke-width="2"/></svg></div>
+            <div><span class="id">06 · AI Research · C-DAC Bengaluru + MTech Thesis</span><h3>Posit neural networks &amp; medical AI</h3></div>
+          </div>
+          <p>At C-DAC, implemented deep-learning operations from scratch on the Posit number system — <b>Posit8/16 inference matching Float32 accuracy</b> (LeNet 98.98%, CIFAR-10 85%) at <b>2–4× lower precision</b>, validating a compute-efficient alternative to IEEE-754. Thesis: <b>ResNet/ResUNet brain-tumour detection &amp; segmentation, ~94% accuracy</b> with ImageNet transfer learning.</p>
+          <div class="mini"><span>Posit arithmetic</span><span>ResNet</span><span>ResUNet</span><span>Transfer learning</span></div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= STACK ======= -->
+<section id="stack" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">Federated stack</p>
+    <h2>Tools I run in production</h2>
+    <div class="stack-group reveal">
+      <h3>BIM &amp; VDC</h3>
+      <div class="tags">
+        <span class="tag-chip">ACC Docs</span><span class="tag-chip">ACC Build</span><span class="tag-chip">BIM Collaborate Pro</span><span class="tag-chip">Synchro 4D</span><span class="tag-chip">Revit</span><span class="tag-chip">Takeoff</span><span class="tag-chip">Insights</span><span class="tag-chip">Autodesk Validation Tool</span>
+      </div>
+    </div>
+    <div class="stack-group reveal">
+      <h3>Data &amp; Code</h3>
+      <div class="tags">
+        <span class="tag-chip">Python</span><span class="tag-chip">SQL</span><span class="tag-chip">PySpark</span><span class="tag-chip">Power BI</span><span class="tag-chip">Microsoft Fabric</span><span class="tag-chip">Lakehouse</span><span class="tag-chip">Databricks</span><span class="tag-chip">Azure Data Factory</span><span class="tag-chip">REST APIs</span><span class="tag-chip">Autodesk Platform Services</span><span class="tag-chip">Power Automate</span><span class="tag-chip">HTML / CSS / JS</span>
+      </div>
+    </div>
+    <div class="stack-group reveal">
+      <h3>Project Management</h3>
+      <div class="tags">
+        <span class="tag-chip">Primavera P6</span><span class="tag-chip">Progress monitoring &amp; control</span><span class="tag-chip">Billing</span><span class="tag-chip">Risk &amp; issue management</span><span class="tag-chip">Stakeholder coordination</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= EDUCATION ======= -->
+<section id="education" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">Foundation</p>
+    <h2>Education</h2>
+    <div class="edu-list">
+      <div class="edu-row reveal">
+        <div class="edu-year">2018&ndash;2023</div>
+        <div class="edu-main">
+          <h3>Indian Institute of Technology, Madras</h3>
+          <p class="edu-deg">BTech in Engineering Design &amp; MTech in Biomedical Engineering <span class="edu-tag">Dual Degree</span></p>
+          <p class="edu-note">Capped with a deep-learning thesis on AI-based brain-tumour detection and segmentation (94% accuracy, ResNet &amp; ResUNet).</p>
+        </div>
+        <div class="edu-score"><span class="edu-val">7.89</span><span class="edu-lbl">CGPA</span></div>
+      </div>
+      <div class="edu-row reveal">
+        <div class="edu-year">2018</div>
+        <div class="edu-main">
+          <h3>VelocIITy Junior College, Hyderabad</h3>
+          <p class="edu-deg">Class XII &middot; Board of Intermediate Education</p>
+        </div>
+        <div class="edu-score"><span class="edu-val">96.5%</span><span class="edu-lbl">Class XII</span></div>
+      </div>
+      <div class="edu-row reveal">
+        <div class="edu-year">2016</div>
+        <div class="edu-main">
+          <h3>Jawahar Navodaya Vidyalaya, Telangana</h3>
+          <p class="edu-deg">Class X &middot; CBSE</p>
+        </div>
+        <div class="edu-score"><span class="edu-val">10</span><span class="edu-lbl">CGPA · Class X</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= ACHIEVEMENTS ======= -->
+<section id="achievements" style="padding-top:0">
+  <div class="wrap">
+    <p class="eyebrow">Recognition</p>
+    <h2>Achievements &amp; awards</h2>
+    <div class="ach-grid">
+      <div class="ach reveal">
+        <div class="ach-num">2178</div>
+        <div class="ach-body">
+          <h3>JEE Advanced 2018</h3>
+          <p>All-India open-category rank in one of the world&rsquo;s toughest entrance exams.</p>
+        </div>
+      </div>
+      <div class="ach reveal">
+        <div class="ach-num">2025</div>
+        <div class="ach-body">
+          <h3>JEE Mains 2018</h3>
+          <p>All-India open-category rank among 10&nbsp;lakh+ candidates.</p>
+        </div>
+      </div>
+      <div class="ach reveal">
+        <div class="ach-num">&#8377;5.6L</div>
+        <div class="ach-body">
+          <h3>Merit Scholarship</h3>
+          <p>Awarded under the VelocIITy free-education program for meritorious students.</p>
+        </div>
+      </div>
+      <div class="ach reveal">
+        <div class="ach-num">🏸</div>
+        <div class="ach-body">
+          <h3>Inter-Hostel Badminton — Silver</h3>
+          <p>Silver medallist across a 20+ team championship; multi-year inter-hostel volleyball.</p>
+        </div>
+      </div>
+      <div class="ach reveal">
+        <div class="ach-num">94%</div>
+        <div class="ach-body">
+          <h3>AI Brain-Tumour Detection</h3>
+          <p>Thesis model using ResNet &amp; transfer learning; 93.7% segmentation accuracy with ResUNet.</p>
+        </div>
+      </div>
+      <div class="ach reveal">
+        <div class="ach-num">🎨</div>
+        <div class="ach-body">
+          <h3>Visual Art</h3>
+          <p>Still-life, perspective and illusion drawing &mdash; a long-running creative practice.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ======= CONTACT ======= -->
+<section class="contact has-bg-icon" id="contact" style="padding-top:26px">
+  <svg class="bg-icon bl" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="2.4" aria-hidden="true">
+    <circle cx="60" cy="60" r="22"/><circle cx="60" cy="60" r="9"/>
+    <g stroke-linecap="round"><path d="M60 30V16M60 104V90M90 60h14M16 60h14M81 39l10-10M29 91l10-10M81 81l10 10M29 29l10 10"/></g>
+  </svg>
+  <div class="wrap">
+    <h2>Let's build the next one <em>together</em>.</h2>
+    <p class="lede">Open to roles where digital delivery, data and construction converge.</p>
+    <div class="contact-row">
+      <a class="primary" href="mailto:prashanthviswanatham@gmail.com">✉ prashanthviswanatham@gmail.com</a>
+      <a href="http://www.linkedin.com/in/prashanth-viswanatham-064874217" target="_blank" rel="noopener">in / LinkedIn</a>
+      <a href="tel:+917989362282">☎ +91 79893 62282</a>
+    </div>
+  </div>
+</section>
+
+<footer>V Prashanth · IIT Madras · Built in data, delivered on site</footer>
+</div><!-- /#page -->
+
+<script>
+(function(){
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* ============== CANVAS FRAME-SEQUENCE SCRUB INTRO ============== */
+  const FRAME_COUNT = 160;
+  const framePath = (i)=> 'assets/frames/frame_' + String(i).padStart(3,'0') + '.jpg';
+
+  const introScroll = document.getElementById('introScroll');
+  const introStage  = document.getElementById('introStage');
+  const canvas      = document.getElementById('introCanvas');
+  const introBar    = document.getElementById('introBar');
+  const introSkip   = document.getElementById('introSkip');
+  const introHint   = document.getElementById('introHint');
+  const introCaps   = document.getElementById('introCaps');
+  const introLoad   = document.getElementById('introLoad');
+  const ilFill      = document.getElementById('ilFill');
+  const ilPct       = document.getElementById('ilPct');
+  const page        = document.getElementById('page');
+  const ctx = canvas.getContext('2d', {alpha:false});
+
+  /* ---- CONTINUOUS VIDEO + MILESTONE GATES ----
+     The footage is mapped CONTINUOUSLY to scroll, so the video always plays
+     frame-by-frame as you scroll and never freezes on a constant frame.
+     Overlaid on top are MILESTONES (one per caption). You cannot scroll past
+     an un-released milestone in a single motion: if a scroll would carry the
+     video beyond the next milestone, we clamp the scroll back to it and show
+     the caption. The next scroll gesture releases that milestone and the video
+     plays on to the following one. So a hard one-go scroll still stops at the
+     next sentence; scrolling again continues. */
+  const SITE_FRAMES = [10, 28, 46, 62];    // caption 1-4 frames (site)
+  const OFF_FRAMES  = [92, 104, 116];      // caption 5-7 frames (boardroom)
+
+  const CAPS_TEXT = [
+    {h:'Welcome to my portfolio'},
+    {h:'I am Prashanth, Digital Project Delivery professional'},
+    {h:'Most engineers chose Construction or Technology,<br><span class="hl">I chose both</span>'},
+    {h:'From site execution to'},
+    {h:'Digital Transformation, BIM, Automation and Data Analytics'},
+    {h:'I bridge the gap between <br><span class="hl">Construction & Technology</span> to deliver smarter projects'},
+    {h:'Let&rsquo;s dive into my work'}
+  ];
+  const capEls = CAPS_TEXT.map(c=>{
+    const d=document.createElement('div');
+    d.className='intro-cap'+(c.long?' long':'');
+    d.innerHTML='<span class="h">'+c.h+'</span>';
+    introCaps.appendChild(d);
+    return d;
+  });
+
+  // milestone frames in order (one per caption)
+  const MILE_FRAMES = SITE_FRAMES.concat(OFF_FRAMES);
+  // milestone progress positions (frame / lastFrame)
+  const lastFrame = FRAME_COUNT - 1;
+  const MILESTONES = MILE_FRAMES.map(f => f / lastFrame);
+
+  let introFinished=false, rafPending=false, curFrame=-1;
+  let releasedUpTo = -1;     // highest milestone index we're allowed to pass
+  let parkedAt = -1;         // milestone index we are currently parked on (or -1)
+  const images = new Array(FRAME_COUNT);
+
+  function sizeCanvas(){
+    const dpr = Math.min(window.devicePixelRatio||1, 2);
+    canvas.width  = Math.round(window.innerWidth  * dpr);
+    canvas.height = Math.round(window.innerHeight * dpr);
+    if(curFrame>=0) drawFrame(curFrame, true);
+  }
+  function drawFrame(i, force){
+    i = Math.min(lastFrame, Math.max(0, i));
+    if(i===curFrame && !force) return;
+    const img = images[i];
+    if(!img || !img.complete || !img.naturalWidth) return;
+    curFrame=i;
+    const cw=canvas.width, ch=canvas.height, iw=img.naturalWidth, ih=img.naturalHeight;
+    const scale=Math.max(cw/iw, ch/ih), w=iw*scale, h=ih*scale, x=(cw-w)/2, y=(ch-h)/2;
+    ctx.fillStyle='#0B1B33'; ctx.fillRect(0,0,cw,ch);
+    ctx.drawImage(img, x, y, w, h);
+  }
+  function scrollMax(){ return Math.max(1, introScroll.offsetHeight - window.innerHeight); }
+  function progressFromY(y){ return Math.min(Math.max(y/scrollMax(),0),1); }
+
+  /* programmatic scrolls (our own clamps/nudges) must NOT count as user input,
+     otherwise they keep the gesture "alive" and block the next release. */
+  let programmatic=false;
+  function setScroll(y){
+    programmatic=true;
+    const htmlEl=document.documentElement;
+    const prev=htmlEl.style.scrollBehavior; htmlEl.style.scrollBehavior='auto';
+    window.scrollTo(0, y);
+    htmlEl.style.scrollBehavior=prev;
+    // clear on next frame, after the scroll event has fired
+    requestAnimationFrame(()=>{ programmatic=false; });
+  }
+
+  function showCap(idx){
+    if(idx!==activeCapShown){
+      capEls.forEach((el,i)=>el.classList.toggle('show', i===idx));
+      activeCapShown=idx;
+    }
+  }
+  let activeCapShown=-2;
+
+  /* the next milestone that still blocks forward motion */
+  function nextBlockingMilestone(){
+    for(let i=0;i<MILESTONES.length;i++){
+      if(i>releasedUpTo) return i;
+    }
+    return -1;
+  }
+
+  // small tolerance so the caption appears slightly before the exact stop
+  const SNAP_EPS = 0.004;
+
+  function render(){
+    rafPending=false;
+
+    let y = window.scrollY || window.pageYOffset || 0;
+    let p = progressFromY(y);
+
+    const nb = nextBlockingMilestone();
+    if(nb !== -1){
+      const mp = MILESTONES[nb];
+      if(p >= mp){
+        // clamp scroll back to this milestone and park
+        p = mp;
+        const targetY = Math.round(mp * scrollMax());
+        if(Math.abs(y - targetY) > 1){ setScroll(targetY); }
+        parkedAt = nb;
+      } else {
+        parkedAt = -1;
+      }
+    } else {
+      parkedAt = -1;   // all milestones released -> scroll flows freely past
+    }
+
+    // continuous frame from (possibly clamped) progress -> video keeps playing.
+    // Works both ways: scrolling back up re-scrubs the video in reverse.
+    drawFrame(Math.round(p * lastFrame));
+    introBar.style.width=(p*100).toFixed(2)+'%';
+    introHint.classList.toggle('fade', p>0.01);
+
+    // caption: show when parked on a milestone, or while passing very near one
+    let capToShow=-1;
+    if(parkedAt!==-1){
+      capToShow=parkedAt;
+    } else if(releasedUpTo < 0 && p <= MILESTONES[0]){
+      // before the first milestone is released, keep caption 1 on screen
+      // (so "Welcome to my portfolio" shows immediately on load)
+      capToShow=0;
+    } else {
+      for(let i=0;i<MILESTONES.length;i++){
+        if(Math.abs(p-MILESTONES[i])<0.08){ capToShow=i; break; }
+      }
+    }
+    showCap(capToShow);
+    if(typeof updateNav==='function') updateNav();
+
+    // reveal the site nav once we're essentially through the intro
+    const topnav = document.querySelector('.topnav');
+    if(topnav) topnav.classList.toggle('show', p > 0.985);
+  }
+
+  /* Release logic — ONE continuous scroll gesture releases AT MOST ONE
+     milestone, regardless of how long/hard the scroll is.
+     A physical scroll = a burst of many wheel/touch events. We treat a burst
+     with no >GESTURE_GAP ms silence as a single gesture, and allow only one
+     release per gesture (`releasedThisGesture`). Silence ends the gesture and
+     re-arms the next release. */
+  const GESTURE_GAP = 200;        // ms of silence that ends a gesture
+  let inGesture = false;          // currently within an input burst
+  let releasedThisGesture = false;// already spent this gesture's one release
+  let parkedAtGestureStart = false; // were we parked when this gesture began?
+  let lastInputT = 0, gestureWatch = 0;
+
+  function noteInputRaw(){
+    lastInputT = performance.now();
+    if(!inGesture){               // a brand-new gesture begins
+      inGesture = true;
+      releasedThisGesture = false;
+      parkedAtGestureStart = (parkedAt !== -1); // only an already-parked stop is releasable
+    }
+    if(!gestureWatch){
+      gestureWatch = setInterval(()=>{
+        if(performance.now() - lastInputT >= GESTURE_GAP){
+          inGesture = false;      // gesture ended -> next one re-armed
+          clearInterval(gestureWatch); gestureWatch = 0;
+        }
+      }, 40);
+    }
+  }
+  function noteInput(){ if(programmatic) return; noteInputRaw(); } // for scroll events only
+
+  function tryRelease(deltaDown){
+    if(introFinished) return;
+    noteInputRaw();
+    if(parkedAt!==-1 && deltaDown && !releasedThisGesture && parkedAtGestureStart){
+      releasedThisGesture = true;  // spend this gesture's single release
+      releasedUpTo = parkedAt;     // pass exactly this one milestone
+      parkedAt = -1;
+      const y = (window.scrollY||0) + Math.round(0.012*scrollMax());
+      setScroll(y);                // resume motion immediately
+      scheduleRender();
+    }
+  }
+  function scheduleRender(){ if(!rafPending){ rafPending=true; requestAnimationFrame(render); } }
+  function onScroll(){ noteInput(); scheduleRender(); }
+
+  // wheel / touch / keyboard provide the "scroll again" intent for release
+  let touchY=null, touchAccum=0;
+  function onWheel(e){ tryRelease(e.deltaY>0); }
+  function onTouchStart(e){ touchY = e.touches&&e.touches[0]?e.touches[0].clientY:null; touchAccum=0; }
+  function onTouchMove(e){
+    if(touchY!=null && e.touches&&e.touches[0]){
+      const cy=e.touches[0].clientY;
+      const dy = touchY - cy;          // finger up => scroll down
+      touchAccum += dy; touchY = cy;
+      noteInput();
+      if(touchAccum>10){ tryRelease(true); }  // a swipe-down gesture
+    }
+  }
+  function onTouchEnd(){ touchY=null; touchAccum=0; }
+  function onKey(e){
+    if(['ArrowDown','PageDown',' ','Spacebar'].includes(e.key)){ tryRelease(true); }
+    if(e.key==='Escape' && !introFinished) revealSite();
+  }
+
+  /* "Skip intro" / Esc: release all milestones and jump to the website, which
+     sits directly below the intro. The intro is NOT removed — scrolling back up
+     replays the video. */
+  function revealSite(){
+    releasedUpTo = MILESTONES.length - 1;   // unblock everything
+    parkedAt = -1;
+    capEls.forEach(el=>el.classList.remove('show'));
+    const htmlEl=document.documentElement;
+    const prev=htmlEl.style.scrollBehavior; htmlEl.style.scrollBehavior='auto';
+    // scroll to just past the intro spacer = top of #page
+    window.scrollTo(0, Math.round(introScroll.offsetHeight));
+    htmlEl.style.scrollBehavior=prev;
+    updateNav();
+    scheduleRender();
+  }
+
+  /* ----- left/right arrow caption stepping ----- */
+  const navPrev=document.getElementById('navPrev');
+  const navNext=document.getElementById('navNext');
+
+  // which caption are we currently on? (parked one, else the next blocking one)
+  function currentCaption(){
+    if(parkedAt!==-1) return parkedAt;
+    const nb=nextBlockingMilestone();
+    return nb===-1 ? MILESTONES.length-1 : nb;
+  }
+  function smoothScrollTo(targetY){
+    const htmlEl=document.documentElement;
+    const prevB=htmlEl.style.scrollBehavior; htmlEl.style.scrollBehavior='smooth';
+    window.scrollTo(0, Math.round(targetY));
+    setTimeout(()=>{ htmlEl.style.scrollBehavior=prevB; scheduleRender(); }, 60);
+  }
+  function goNext(){
+    const cur=currentCaption();
+    if(cur >= MILESTONES.length-1){ revealSite(); return; }
+    // release the current milestone so we can move to the next stop
+    if(releasedUpTo < cur) releasedUpTo = cur;
+    parkedAt=-1;
+    const nextMp = MILESTONES[cur+1];
+    smoothScrollTo(nextMp * scrollMax());
+    updateNav();
+  }
+  function goPrev(){
+    const cur=currentCaption();
+    if(cur <= 0){ smoothScrollTo(0); return; }
+    // re-gate the previous milestone so it stops there again
+    releasedUpTo = cur-2;            // blocks milestone (cur-1)
+    parkedAt=-1;
+    const prevMp = MILESTONES[cur-1];
+    smoothScrollTo(prevMp * scrollMax());
+    updateNav();
+  }
+  function updateNav(){
+    const cur=currentCaption();
+    if(navPrev) navPrev.disabled = (cur<=0);
+    // next is always usable (turns into "enter site" at the end)
+  }
+
+  function startScrub(){
+    introLoad.classList.add('hide');
+    sizeCanvas();
+    drawFrame(0,true);
+    addEventListener('scroll', onScroll, {passive:true});
+    addEventListener('resize', ()=>{ sizeCanvas(); onScroll(); }, {passive:true});
+    addEventListener('wheel', onWheel, {passive:true});
+    addEventListener('touchstart', onTouchStart, {passive:true});
+    addEventListener('touchmove', onTouchMove, {passive:true});
+    addEventListener('touchend', onTouchEnd, {passive:true});
+    addEventListener('keydown', onKey);
+    requestAnimationFrame(render);
+  }
+
+  if(reduced){
+    introScroll.style.display='none';
+    if(introStage) introStage.remove();
+    document.body.classList.remove('intro-active');
+    page.classList.add('ready');
+    const tn=document.querySelector('.topnav'); if(tn) tn.classList.add('show');
+  } else {
+    let loaded=0, failed=0, started=false;
+    function maybeStart(){ if(!started){ started=true; startScrub(); } }
+    function tick(){
+      const done=loaded+failed;
+      const pct=Math.round(done/FRAME_COUNT*100);
+      ilFill.style.width=pct+'%'; ilPct.textContent=pct+'%';
+      if(done>=FRAME_COUNT) maybeStart();
+    }
+    for(let i=0;i<FRAME_COUNT;i++){
+      const img=new Image(); img.decoding='async';
+      img.onload=()=>{ loaded++; tick(); };
+      img.onerror=()=>{ failed++; tick(); };
+      img.src=framePath(i+1);
+      images[i]=img;
+    }
+    introSkip.addEventListener('click', revealSite);
+    if(navNext) navNext.addEventListener('click', goNext);
+    if(navPrev) navPrev.addEventListener('click', goPrev);
+    updateNav();
+    setTimeout(()=>{ if((loaded+failed) >= FRAME_COUNT*0.6) maybeStart(); }, 8000);
+  }
+
+  /* scroll progress bar */
+  const sBar=document.getElementById('scrollBar');
+  addEventListener('scroll',()=>{
+    const h=document.documentElement;
+    sBar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+'%';
+  },{passive:true});
+
+  /* cursor glow (fine pointers only) */
+  const glowEl=document.getElementById('cursorGlow');
+  if(!reduced && matchMedia('(pointer:fine)').matches){
+    addEventListener('pointermove',e=>{ glowEl.style.left=e.clientX+'px'; glowEl.style.top=e.clientY+'px'; },{passive:true});
+  } else { glowEl.remove(); }
+
+  /* marquee loop */
+  const track=document.getElementById('marqueeTrack');
+  track.innerHTML+=track.innerHTML;
+
+  /* reveal on scroll */
+  const io=new IntersectionObserver(es=>{
+    es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target);} });
+  },{threshold:.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+  /* counters */
+  const cio=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(!e.isIntersecting) return;
+      const el=e.target, end=+el.dataset.count, t0c=performance.now(), dur=reduced?0:1300;
+      const step=t=>{
+        const p=dur?Math.min((t-t0c)/dur,1):1;
+        el.textContent=Math.round(end*(1-Math.pow(1-p,3)));
+        if(p<1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+      cio.unobserve(el);
+    });
+  },{threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(el=>cio.observe(el));
+
+  /* ================= HORIZONTAL HIGHWAY JOURNEY ================= */
+  const ROAD_Y=400;            /* top of road; truck wheels sit here */
+  const stopsX=[120,310,500,690,880,1070];
+  const milestones=[
+    {icon:'🎓', lines:['IIT','Madras'], tag:'Milestone 01 · Foundation', title:'IIT Madras — Dual Degree',
+     where:'BTech Engineering Design + MTech Biomedical · 2018–2023',
+     body:'Engineering foundation built at India’s top institute.',
+     logo:'assets/logos/iitm.png', org:'IITM', period:'2018–2023'},
+    {icon:'🧠', lines:['AI','Intern'], tag:'Milestone 02 · Research', title:'C-DAC — Posit AI Internship',
+     where:'Data Science Intern, Bengaluru · Dec ’21 – Jun ’22',
+     body:'Optimized AI algorithms using compute efficient number system(Posit16).',
+     logo:'assets/logos/cdac.png', org:'C-DAC', period:'Dec’21–Jun’22'},
+    {icon:'⚡', lines:['Site','Execution'], tag:'Milestone 03 · Site', title:'400 kV Kharghar–Vikhroli Line',
+     where:'Executive Trainee, T&amp;D · Aug ’23 – Feb ’24',
+     body:'Delivered planning, execution and billing for a 400 kV transmission line across complex terrain.',
+     logo:'assets/logos/tata.png', org:'TATA', period:'Aug’23–Feb’24'},
+    {icon:'⚙️', lines:['Process','Re-Eng'], tag:'Milestone 04 · Scale', title:'Process Re-engineering',
+     where:'Manager, Central Engineering · 2024 – Present',
+     body:'Enterprise-wide BIM and Engineering process transformation aligned with ISO19650 improving efficiency and scalability .',
+     logo:'assets/logos/tata.png', org:'TATA', period:'2024–Present'},
+    {icon:'🏗️', lines:['Digital','Delivery'], tag:'Milestone 05 · Flagship', title:'Digital Project Delivery',
+     where:'ACC as CDE · Air India MRO, Metro, Google DC, TMU',
+     body:'Implemented end to end Integrated digital project delivery from design to construction for EPC projects',
+     logo:'assets/logos/tata.png', org:'TATA', period:'2023–Present'},
+    {icon:'💻', lines:['Data','Analytics'], tag:'Milestone 06 · Craft', title:'Web Development',
+     where:'TPL Digital Month · Interactive landing site',
+     body:'Developed real-time automated dashboards for project controls and tracking, enabling data-driven decision-making',
+     logo:'assets/logos/tata.png', org:'TATA', period:'Jun 2025'}
+  ];
+
+  /* build milestone HIGHWAY BOARDS: twin posts + gantry sign carrying the
+     org LOGO (white chip) on the left and the milestone name on the right */
+  const stopsLayer=document.getElementById('stops');
+  const NS='http://www.w3.org/2000/svg';
+  const XLINK='http://www.w3.org/1999/xlink';
+  const BW=156, BH=100, BY=-184;       /* board width/height, top-y above road */
+  const LOGO=46;                        /* logo chip size on the board */
+  const stopGroups=milestones.map((m,i)=>{
+    const x=stopsX[i];
+    const g=document.createElementNS(NS,'g');
+    g.setAttribute('class','stopGroup');
+    g.setAttribute('transform',`translate(${x},${ROAD_Y})`);
+    g.setAttribute('tabindex','0');
+    g.setAttribute('role','button');
+    g.setAttribute('aria-label','Milestone: '+m.title);
+    const two=m.lines.length>1;
+    const left=-BW/2;
+    const cy=BY+BH/2;
+    /* logo chip on the left of the board */
+    const chipX=left+8, chipY=BY+(BH-LOGO)/2;
+    /* name text starts to the right of the chip */
+    const txtX=chipX+LOGO+12;
+    const labelTspans = two
+      ? `<tspan x="${txtX}" dy="-6">${m.lines[0]}</tspan><tspan x="${txtX}" dy="19">${m.lines[1]}</tspan>`
+      : `<tspan x="${txtX}" dy="2">${m.lines[0]}</tspan>`;
+    g.innerHTML=`
+      <line x1="-46" y1="0" x2="-46" y2="${BY+BH}" stroke="#0D2548" stroke-width="4"/>
+      <line x1="46"  y1="0" x2="46"  y2="${BY+BH}" stroke="#0D2548" stroke-width="4"/>
+      <rect x="-52" y="-4" width="12" height="8" rx="2" fill="#0D2548"/>
+      <rect x="40"  y="-4" width="12" height="8" rx="2" fill="#0D2548"/>
+      <g class="board">
+        <rect class="boardBg" x="${left}" y="${BY}" width="${BW}" height="${BH}" rx="11" fill="url(#boardG)"/>
+        <rect x="${left+5}" y="${BY+5}" width="${BW-10}" height="${BH-10}" rx="8" fill="none" stroke="#FFFFFF" stroke-width="2.4"/>
+        <rect x="${left+8}" y="${BY-13}" width="38" height="18" rx="4" fill="#FF6A1F"/>
+        <text x="${left+27}" y="${BY+0.5}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="11" font-weight="600" fill="#fff">0${i+1}</text>
+        <!-- logo chip -->
+        <rect x="${chipX}" y="${chipY}" width="${LOGO}" height="${LOGO}" rx="9" fill="#fff"/>
+        <image class="boardLogo" x="${chipX+5}" y="${chipY+5}" width="${LOGO-10}" height="${LOGO-10}"
+               href="${m.logo}" preserveAspectRatio="xMidYMid meet"/>
+        <text class="boardMono" x="${chipX+LOGO/2}" y="${chipY+LOGO/2+4}" text-anchor="middle"
+              font-family="Unbounded,Archivo,sans-serif" font-size="11" font-weight="700" fill="#0E4C97"
+              style="display:none">${m.org||''}</text>
+        <!-- name -->
+        <text class="boardTxt" x="${txtX}" y="${cy-4}" text-anchor="start" font-family="Archivo,sans-serif" font-size="16" font-weight="800" fill="#FFFFFF">${labelTspans}</text>
+        <!-- period / date strip at bottom of board -->
+        <line x1="${left+10}" y1="${BY+BH-22}" x2="${left+BW-10}" y2="${BY+BH-22}" stroke="rgba(255,255,255,.5)" stroke-width="1"/>
+        <text x="${left+BW/2}" y="${BY+BH-8}" text-anchor="middle" font-family="IBM Plex Mono,monospace" font-size="9.5" font-weight="600" fill="#FFFFFF" letter-spacing=".04em">${m.period||''}</text>
+      </g>
+      <rect x="-78" y="${BY-18}" width="156" height="${-BY+18}" fill="transparent"/>`;
+    stopsLayer.appendChild(g);
+    /* logo fallback: if the file is missing try alt extensions, then show monogram */
+    const imgEl=g.querySelector('.boardLogo');
+    const monoEl=g.querySelector('.boardMono');
+    imgEl.addEventListener('error',()=>{
+      const tried=imgEl.dataset.tried||'';
+      const base=m.logo.replace(/\.(png|jpe?g|svg)$/i,'');
+      const alts=['.jpg','.jpeg','.png'].filter(e=>!tried.includes(e)&&!m.logo.toLowerCase().endsWith(e));
+      if(alts.length){
+        imgEl.dataset.tried=(tried+alts[0]);
+        imgEl.setAttribute('href',base+alts[0]);
+      } else {
+        imgEl.style.display='none'; monoEl.style.display='';
+      }
+    });
+    return g;
+  });
+
+  const jrOut=document.getElementById('jrOut'),
+        rangeSvg=document.getElementById('range'),
+        truck=document.getElementById('truck'),
+        trail=document.getElementById('trail'),
+        w1=document.getElementById('wheel1'), w2=document.getElementById('wheel2'),
+        jrBody=document.getElementById('jrBody'), jrCard=document.getElementById('jrCard'),
+        playBtn=document.getElementById('playBtn');
+
+  /* position the popup horizontally above a given board (viewBox x) */
+  function positionPop(boardX){
+    const svgW=rangeSvg.getBoundingClientRect().width || 1200;
+    const stageW=jrCard.parentElement.getBoundingClientRect().width || svgW;
+    const px=(boardX/1200)*svgW;          // board x in stage pixels
+    const half=jrCard.getBoundingClientRect().width/2 || 165;
+    const clamped=Math.min(Math.max(px, half+8), stageW-half-8);
+    jrCard.style.left=clamped+'px';
+  }
+
+  const X_MIN=60, X_MAX=1110;
+  let targetX=X_MIN, currX=X_MIN, wheelRot=0, activeI=-1;
+  let auto=true, restarting=false, restartT=0, loopRaf=null, inView=false, lastT=null;
+  const SPEED=72;            /* px per second — continuous cruise */
+
+  function nearestStop(x){
+    let best=0,bd=1e9;
+    stopsX.forEach((sx,i)=>{ const d=Math.abs(sx-x); if(d<bd){bd=d;best=i;} });
+    return best;
+  }
+  function setActive(i){
+    if(i===activeI) return;
+    activeI=i;
+    stopGroups.forEach((g,k)=>{
+      g.classList.toggle('active',k===i);
+      g.classList.toggle('dim',k!==i);
+    });
+    const m=milestones[i];
+    jrOut.textContent=`MILESTONE ${i+1} / 6`;
+    // popup shows a single milestone sentence
+    jrBody.innerHTML=m.body;
+    positionPop(stopsX[i]);
+    if(!reduced){
+      jrCard.classList.remove('jr-pop-pop'); void jrCard.offsetWidth;
+      jrCard.classList.add('jr-pop-pop');
+    }
+  }
+
+  function frame(now){
+    if(lastT===null) lastT=now;
+    const dt=Math.min((now-lastT)/1000,.05);
+    lastT=now;
+
+    if(auto && inView){
+      if(restarting){
+        const p=(now-restartT)/600;
+        if(p<1){ truck.style.opacity=String(Math.max(0,1-p)); }
+        else { currX=X_MIN; targetX=X_MIN; truck.style.opacity='1'; restarting=false; }
+      }else{
+        targetX=Math.min(targetX+SPEED*dt, X_MAX);
+        if(targetX>=X_MAX && currX>=X_MAX-1){ restarting=true; restartT=now; }
+      }
+    }
+    const dx=targetX-currX;
+    currX += reduced ? dx : dx*0.16;
+    if(Math.abs(dx)<0.3) currX=targetX;
+    truck.setAttribute('transform',`translate(${currX},${ROAD_Y})`);
+    trail.setAttribute('x2',Math.max(X_MIN,currX-40));
+    wheelRot += (auto&&!restarting?SPEED*dt*1.2:0) + Math.abs(dx)*0.7;
+    const r=`rotate(${wheelRot%360})`;
+    w1.setAttribute('transform',`translate(-32,0) ${r}`);
+    w2.setAttribute('transform',`translate(24,0) ${r}`);
+    setActive(nearestStop(currX));
+    loopRaf=requestAnimationFrame(frame);
+  }
+
+  const jIO=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      inView=e.isIntersecting;
+      if(inView && !loopRaf){ lastT=null; loopRaf=requestAnimationFrame(frame); }
+      if(!inView && loopRaf){ cancelAnimationFrame(loopRaf); loopRaf=null; }
+    });
+  },{threshold:.25});
+  jIO.observe(document.getElementById('range'));
+  addEventListener('resize', ()=>{ if(activeI>=0) positionPop(stopsX[activeI]); }, {passive:true});
+
+  function pauseAuto(){
+    if(!auto) return;
+    auto=false; restarting=false; truck.style.opacity='1';
+    playBtn.textContent='▶ Auto-drive';
+  }
+  function resumeAuto(){
+    auto=true; playBtn.textContent='⏸ Auto-driving';
+    targetX=currX;
+  }
+  playBtn.addEventListener('click',()=>{ auto?pauseAuto():resumeAuto(); });
+
+  /* the TRUCK is the scrubber: drag it, or tap anywhere on the road */
+  function svgX(e){
+    const r=rangeSvg.getBoundingClientRect();
+    return Math.min(Math.max(((e.clientX-r.left)/r.width)*1200,X_MIN),X_MAX);
+  }
+  let dragging=false;
+  truck.addEventListener('pointerdown',e=>{
+    e.preventDefault(); dragging=true; pauseAuto(); targetX=svgX(e);
+  });
+  addEventListener('pointermove',e=>{ if(dragging){ targetX=svgX(e); } },{passive:true});
+  addEventListener('pointerup',()=>{ dragging=false; });
+  rangeSvg.addEventListener('pointerdown',e=>{
+    if(e.target.closest('.stopGroup')||e.target.closest('#truck')) return;
+    const r=rangeSvg.getBoundingClientRect();
+    const yv=((e.clientY-r.top)/r.height)*470;
+    if(yv>355){ pauseAuto(); targetX=svgX(e); dragging=true; }   /* tap/drag on the road itself */
+  });
+  stopGroups.forEach((g,i)=>{
+    const drive=()=>{ pauseAuto(); targetX=stopsX[i]; };
+    g.addEventListener('click',drive);
+    g.addEventListener('keydown',e=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); drive(); } });
+  });
+
+  setActive(0);
+
+  /* ================= PROJECT SCROLLSPY ================= */
+  const menuLinks=[...document.querySelectorAll('#projMenu a')];
+  const sections=menuLinks.map(a=>document.querySelector(a.getAttribute('href')));
+  const spy=new IntersectionObserver(es=>{
+    es.forEach(e=>{
+      if(e.isIntersecting){
+        const id='#'+e.target.id;
+        menuLinks.forEach(a=>{
+          const on=a.getAttribute('href')===id;
+          a.classList.toggle('active',on);
+          if(on && matchMedia('(max-width:900px)').matches){
+            a.scrollIntoView({block:'nearest',inline:'center',behavior:'smooth'});
+          }
+        });
+      }
+    });
+  },{rootMargin:'-30% 0px -60% 0px'});
+  sections.forEach(s=>spy.observe(s));
+  menuLinks.forEach(a=>a.addEventListener('click',()=>{
+    menuLinks.forEach(x=>x.classList.remove('active')); a.classList.add('active');
+  }));
+})();
+</script>
+</body>
+</html>
