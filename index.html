@@ -1394,7 +1394,7 @@ body.intro-active{overflow-x:hidden}
   const MILESTONES = MILE_FRAMES.map(f => f / lastFrame);
 
   let introFinished=false, rafPending=false, curFrame=-1;
-  let releasedUpTo = -1;     // highest milestone index we're allowed to pass
+  let releasedUpTo = 0;     // highest milestone index we're allowed to pass
   let parkedAt = -1;         // milestone index we are currently parked on (or -1)
   const images = new Array(FRAME_COUNT);
 
@@ -1482,7 +1482,7 @@ body.intro-active{overflow-x:hidden}
     let capToShow=-1;
     if(parkedAt!==-1){
       capToShow=parkedAt;
-    } else if(releasedUpTo < 0 && p <= MILESTONES[0]){
+    } else if(p <= MILESTONES[0]){
       // before the first milestone is released, keep caption 1 on screen
       // (so "Welcome to my portfolio" shows immediately on load)
       capToShow=0;
