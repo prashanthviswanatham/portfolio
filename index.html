@@ -1505,7 +1505,7 @@ body.intro-active{overflow-x:hidden}
      with no >GESTURE_GAP ms silence as a single gesture, and allow only one
      release per gesture (`releasedThisGesture`). Silence ends the gesture and
      re-arms the next release. */
-  const GESTURE_GAP = 200;        // ms of silence that ends a gesture
+  const GESTURE_GAP = 50;        // ms of silence that ends a gesture
   let inGesture = false;          // currently within an input burst
   let releasedThisGesture = false;// already spent this gesture's one release
   let parkedAtGestureStart = false; // were we parked when this gesture began?
