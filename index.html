@@ -448,6 +448,9 @@ input[type=range]:focus-visible{outline:3px solid var(--cyan);outline-offset:6px
 .cap p b{color:var(--blue);font-weight:700}
 .cap .mini{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
 .cap .mini span{font-family:var(--mono);font-size:11px;font-weight:500;color:#5B7396;border:1px solid var(--line2);border-radius:7px;padding:5px 10px;background:rgba(11,60,122,.03)}
+/* Align description + chips with the title text (icon 50px + 16px gap = 66px) */
+.cap>p,.cap .mini{margin-left:66px}
+@media(max-width:640px){.cap>p,.cap .mini{margin-left:0}}
 
 /* ============ STACK ============ */
 .stack-group{margin-top:34px}
@@ -695,6 +698,14 @@ body.intro-active{overflow-x:hidden}
   transform:translateY(-4px);
   box-shadow:0 34px 70px -26px rgba(11,60,122,.42), inset 0 1px 0 rgba(255,255,255,.85);
 }
+/* Card highlight synced with the orange menu item (project scroll-spy) */
+.cap.cap-active{
+  border-color:var(--accent);
+  box-shadow:
+    0 0 0 3px rgba(255,106,31,.20),
+    0 24px 55px -20px rgba(255,106,31,.42),
+    inset 0 1px 0 rgba(255,255,255,.85);
+}
 
 /* faint gridded floor inside the number cards */
 .prop{background-image:
@@ -761,7 +772,7 @@ html.dm-blocked #dmGate{
 #dmGate .dm-icon{width:78px;height:auto;margin:0 auto 14px;display:block}
 #dmGate h1{
   font-family:var(--display,'Unbounded',sans-serif);font-weight:700;
-  font-size:clamp(24px,7vw,32px);line-height:1.3;margin:0 0 10px;
+  font-size:clamp(19px,5.6vw,24px);line-height:1.3;margin:0 0 10px;
 }
 #dmGate h1 .dm-hl{color:var(--accent,#FF6A1F)}
 #dmGate .dm-sub{font-size:14.5px;line-height:1.6;opacity:.85;margin:0 0 18px}
@@ -1233,7 +1244,7 @@ html.dm-blocked #dmGate{
       </aside>
 
       <div class="proj-list">
-        <article class="cap reveal" id="p-cde">
+        <article class="cap reveal cap-active" id="p-cde">
           <div class="cap-head">
             <div class="icon"><svg viewBox="0 0 30 30" fill="none"><rect x="3" y="13" width="10" height="14" rx="1.5" stroke="#0B3C7A" stroke-width="2"/><rect x="17" y="6" width="10" height="21" rx="1.5" stroke="#FF6A1F" stroke-width="2" stroke-dasharray="4 3"/><line x1="13" y1="18" x2="17" y2="18" stroke="#089FC4" stroke-width="2"/></svg></div>
             <div><span class="id">01 · Digital Project Delivery · Tata Projects</span><h3>End-to-end Digital Project Delivery in EPC projects</h3></div>
@@ -1252,7 +1263,7 @@ html.dm-blocked #dmGate{
             <div class="icon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#0B3C7A" stroke-width="2"/><path d="M15 4 A11 11 0 0 1 26 15 L15 15 Z" fill="#FF6A1F"/><circle cx="15" cy="15" r="4" fill="#089FC4"/></svg></div>
             <div><span class="id">02 · Analytics &amp; Automation · Tata Projects</span><h3>Dashboards that replace manual reporting</h3></div>
           </div>
-<p></p>Built <b>10+ enterprise Power BI dashboards</b>, including <b>real-time engineering, procurement &amp; construction</b>, <b>model-based planned-vs.-actual quantity tracking</b>, and <b>4D simulation dashboards</b>, enabling <b>data-driven decision-making</b> and <b>early risk identification</b>. Developed <b>APS</b> and <b>Power Automate automations</b> to streamline workflows, improve data consistency, and save hours of manual effort daily, powered by <b>end-to-end ETL and CI/CD pipelines</b> built using <b>Python, SQL, PySpark, Microsoft Fabric, REST APIs</b>, and <b>Lakehouse</b>.</p>
+<p>Built <b>10+ enterprise Power BI dashboards</b>, including <b>real-time engineering, procurement &amp; construction</b>, <b>model-based planned-vs.-actual quantity tracking</b>, and <b>4D simulation dashboards</b>, enabling <b>data-driven decision-making</b> and <b>early risk identification</b>. Developed <b>APS</b> and <b>Power Automate automations</b> to streamline workflows, improve data consistency, and save hours of manual effort daily, powered by <b>end-to-end ETL and CI/CD pipelines</b> built using <b>Python, SQL, PySpark, Microsoft Fabric, REST APIs</b>, and <b>Lakehouse</b>.</p>
           <div class="mini"><span>Power BI</span><span>Fabric</span><span>PySpark</span><span>APS</span><span>Power Automate</span></div>
         </article>
 
@@ -2023,6 +2034,7 @@ html.dm-blocked #dmGate{
     es.forEach(e=>{
       if(e.isIntersecting){
         const id='#'+e.target.id;
+        sections.forEach(sec=>sec.classList.toggle('cap-active',('#'+sec.id)===id));
         menuLinks.forEach(a=>{
           const on=a.getAttribute('href')===id;
           a.classList.toggle('active',on);
@@ -2036,6 +2048,8 @@ html.dm-blocked #dmGate{
   sections.forEach(s=>spy.observe(s));
   menuLinks.forEach(a=>a.addEventListener('click',()=>{
     menuLinks.forEach(x=>x.classList.remove('active')); a.classList.add('active');
+    const t=document.querySelector(a.getAttribute('href'));
+    sections.forEach(sec=>sec.classList.toggle('cap-active',sec===t));
   }));
 })();
 </script>
