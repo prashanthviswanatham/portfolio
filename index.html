@@ -719,8 +719,100 @@ body.intro-active{overflow-x:hidden}
 @media (prefers-reduced-motion:reduce){ .cap:hover,.edu:hover{transform:none} }
 
 </style>
+<!-- ===================== DESKTOP-MODE GATE (detector + styles) =====================
+     Blocks the site on phone browsers unless "Desktop site" mode is enabled.
+     Why it works: with Desktop mode ON, phones send a desktop user-agent
+     (Android -> "X11; Linux", iPhone -> "Macintosh"), so the test below passes
+     and the site loads normally. Toggling Desktop mode auto-reloads the page.
+     To remove the gate: delete this block, the #dmGate markup after <body>,
+     and the one "dm-blocked" guard line at the top of the main script. -->
+<script>
+(function(){
+  var ua = navigator.userAgent || '';
+  if(/android|iphone|ipod|ipad|windows phone|blackberry|bb10|opera mini|iemobile|mobi/i.test(ua)){
+    document.documentElement.classList.add('dm-blocked');
+  }
+})();
+</script>
+<style id="dmGateStyle">
+#dmGate{display:none}
+html.dm-blocked, html.dm-blocked body{overflow:hidden!important;height:100%!important}
+html.dm-blocked body > *:not(#dmGate){display:none!important}
+html.dm-blocked #dmGate{
+  display:flex;position:fixed;inset:0;z-index:2147483000;
+  align-items:center;justify-content:center;padding:22px;overflow:auto;
+  background:
+    radial-gradient(900px 500px at 85% -5%, rgba(8,159,196,.12), transparent 60%),
+    radial-gradient(800px 500px at -5% 30%, rgba(255,106,31,.09), transparent 60%),
+    var(--paper,#F2F6FB);
+}
+#dmGate .dm-card{
+  width:min(560px,100%);background:var(--card,#fff);
+  border:1px solid var(--line2,rgba(11,60,122,.30));
+  border-radius:var(--radius,18px);box-shadow:var(--shadow,0 18px 50px -18px rgba(11,60,122,.25));
+  padding:30px 26px;text-align:center;color:var(--ink,#0D2548);
+  font-family:var(--body,'Archivo','Segoe UI',sans-serif);
+  margin:auto;
+}
+#dmGate .dm-kicker{
+  font-family:var(--mono,'IBM Plex Mono',monospace);font-size:11.5px;font-weight:600;
+  letter-spacing:.14em;color:var(--accent,#FF6A1F);margin-bottom:14px;
+}
+#dmGate .dm-icon{width:78px;height:auto;margin:0 auto 14px;display:block}
+#dmGate h1{
+  font-family:var(--display,'Unbounded',sans-serif);font-weight:700;
+  font-size:clamp(19px,5.6vw,24px);line-height:1.3;margin:0 0 10px;
+}
+#dmGate h1 .dm-hl{color:var(--accent,#FF6A1F)}
+#dmGate .dm-sub{font-size:14.5px;line-height:1.6;opacity:.85;margin:0 0 18px}
+#dmGate .dm-steps{display:grid;gap:8px;text-align:left;margin:0 0 16px}
+#dmGate .dm-step{
+  border:1px solid var(--line,rgba(11,60,122,.14));border-radius:12px;
+  padding:11px 13px;font-size:13.5px;line-height:1.5;background:rgba(11,60,122,.03);
+}
+#dmGate .dm-step .dm-b{
+  display:block;font-family:var(--mono,'IBM Plex Mono',monospace);font-size:11px;font-weight:600;
+  letter-spacing:.1em;color:var(--blue,#0B3C7A);margin-bottom:2px;text-transform:uppercase;
+}
+#dmGate .dm-note{font-family:var(--mono,'IBM Plex Mono',monospace);font-size:11.5px;color:var(--blue,#0B3C7A);opacity:.75;margin:0 0 16px}
+#dmGate #dmReload{
+  font-family:var(--body,'Archivo','Segoe UI',sans-serif);font-weight:700;font-size:14px;
+  color:#fff;background:var(--accent,#FF6A1F);border:0;border-radius:999px;
+  padding:12px 22px;cursor:pointer;
+}
+#dmGate #dmReload:active{transform:scale(.97)}
+</style>
 </head>
 <body class="intro-active">
+<!-- ===== DESKTOP-MODE GATE (overlay) — visible only when html has .dm-blocked ===== -->
+<div id="dmGate" role="dialog" aria-modal="true" aria-labelledby="dmTitle">
+  <div class="dm-card">
+    <div class="dm-kicker">// DESKTOP EXPERIENCE</div>
+    <svg class="dm-icon" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <rect x="2" y="2" width="88" height="56" rx="8" stroke="var(--blue,#0B3C7A)" stroke-width="3.5"/>
+      <rect x="10" y="10" width="72" height="40" rx="3" fill="rgba(8,159,196,.14)"/>
+      <path d="M34 72h24M46 58v14" stroke="var(--blue,#0B3C7A)" stroke-width="3.5" stroke-linecap="round"/>
+      <rect x="86" y="30" width="26" height="48" rx="6" fill="var(--card,#FFFFFF)" stroke="var(--accent,#FF6A1F)" stroke-width="3.5"/>
+      <line x1="95" y1="71" x2="103" y2="71" stroke="var(--accent,#FF6A1F)" stroke-width="3" stroke-linecap="round"/>
+      <path d="M100 42l-7 9h5l-3 9 10-12h-5l3-6z" fill="var(--accent,#FF6A1F)"/>
+    </svg>
+    <h1 id="dmTitle">Please enable <span class="dm-hl">Desktop&nbsp;mode</span></h1>
+    <p class="dm-sub">This portfolio is an interactive, scroll-driven experience designed for a desktop-size screen. To view it on your phone, switch your browser to Desktop mode:</p>
+    <div class="dm-steps">
+      <div class="dm-step"><span class="dm-b">Chrome &middot; Android</span>Tap the <strong>&#8942;</strong> menu (top-right) &rarr; tick <strong>&ldquo;Desktop site&rdquo;</strong></div>
+      <div class="dm-step"><span class="dm-b">Safari &middot; iPhone</span>Tap <strong>&ldquo;AA&rdquo;</strong> in the address bar &rarr; <strong>&ldquo;Request Desktop Website&rdquo;</strong></div>
+      <div class="dm-step"><span class="dm-b">Other browsers</span>Open the browser menu &rarr; look for <strong>&ldquo;Desktop site&rdquo;</strong></div>
+    </div>
+    <p class="dm-note">The page reloads automatically once Desktop mode is on.</p>
+    <button id="dmReload" type="button">I&rsquo;ve enabled it &mdash; Reload &#8635;</button>
+  </div>
+</div>
+<script>
+(function(){
+  var b=document.getElementById('dmReload');
+  if(b) b.addEventListener('click',function(){location.reload();});
+})();
+</script>
 <div id="scrollBar" aria-hidden="true"></div>
 <div id="cursorGlow" aria-hidden="true"></div>
 
@@ -1339,6 +1431,10 @@ body.intro-active{overflow-x:hidden}
 
 <script>
 (function(){
+  /* DESKTOP-MODE GATE: stop all site JS (incl. the 160-frame intro preload)
+     while the site is blocked on a phone browser in mobile mode. */
+  if(document.documentElement.classList.contains('dm-blocked')) return;
+
   const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ============== CANVAS FRAME-SEQUENCE SCRUB INTRO ============== */
